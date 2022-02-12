@@ -31,11 +31,15 @@ class WindowMover():
         for window in self.windows:
             if (window['app'] == initial_app):
                 target_space = window['space']
+                time.sleep(1)
                 subprocess.run(f"/opt/homebrew/bin/yabai -m window --focus {self.apps[initial_app]['id']}".split(' '), check=True)
+                time.sleep(0.5)
                 subprocess.run(f"/opt/homebrew/bin/yabai -m window --insert {direction}".split(' '), check=True)
+                time.sleep(1)
                 subprocess.run(f"/opt/homebrew/bin/yabai -m window --focus {self.apps[new_app]['id']}".split(' '), check=True)
+                time.sleep(0.5)
                 subprocess.run(f"/opt/homebrew/bin/yabai -m window --space {target_space}".split(' '), check=True)
-                subprocess.run(f"/opt/homebrew/bin/yabai -m window --focus {self.apps[initial_app]['id']}".split(' '), check=True)
+                time.sleep(0.5)
 
     def get_spaces_status(self):
         results = subprocess.run(['/opt/homebrew/bin/yabai', '-m', 'query', '--spaces'], capture_output=True, check=True)
@@ -54,6 +58,7 @@ class WindowMover():
             print(f"Staging app: {window['app']} in window {window['id']}")
             subprocess.run(f"/opt/homebrew/bin/yabai -m window --focus {window['id']}".split(' '), check=True)
             subprocess.run(f"/opt/homebrew/bin/yabai -m window --space {len(self.spaces)}".split(' '), check=True)
+            time.sleep(0.5)
 
     def move_app_to_space(self, app, space):
         print(f"Moving app {app} to space {space}")
@@ -100,14 +105,17 @@ class WindowMover():
         for window in self.windows:
             if (window['app'] == top_app):
                 target_space = window['space']
-                time.sleep(0.5)
+                time.sleep(0.7)
                 subprocess.run(f"/opt/homebrew/bin/yabai -m window --focus {self.apps[top_app]['id']}".split(' '), check=True)
+                time.sleep(0.7)
                 subprocess.run(f"/opt/homebrew/bin/yabai -m window --insert stack".split(' '), check=True)
+                time.sleep(0.7)
                 subprocess.run(f"/opt/homebrew/bin/yabai -m window --focus {self.apps[bottom_app]['id']}".split(' '), check=True)
-                time.sleep(0.5)
+                time.sleep(0.7)
                 subprocess.run(f"/opt/homebrew/bin/yabai -m window --space {target_space}".split(' '), check=True)
-                time.sleep(0.5)
+                time.sleep(0.7)
                 subprocess.run(f"/opt/homebrew/bin/yabai -m window --focus {self.apps[top_app]['id']}".split(' '), check=True)
+                time.sleep(0.7)
 
 
 
@@ -119,7 +127,6 @@ if __name__ == '__main__':
     wm.move_app_to_space('iTerm2', 1)
     wm.move_app_to_space('nvALT', 1)
     wm.move_app_to_space('Google Chrome', 1)
-    wm.move_app_to_space('GitHub Desktop', 2)
     wm.move_app_to_space('Adobe Photoshop 2022', 3)
     wm.move_app_to_space('Discord', 5)
     wm.move_app_to_space('Music', 6)
@@ -128,6 +135,7 @@ if __name__ == '__main__':
 
     wm.stack_apps('iTerm2', 'Code')
     wm.stack_apps('Google Chrome', 'Terminal')
+    wm.stack_apps('nvALT', 'GitHub Desktop')
 
     wm.add_app_after_direction('iTerm2', 'south', 'CodeRunner')
     wm.add_app_after_direction('CodeRunner', 'east', 'Sublime Text')
