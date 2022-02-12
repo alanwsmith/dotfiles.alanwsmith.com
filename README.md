@@ -1,2 +1,5 @@
 # dotfiles.alanwsmith.com
-My dotfiles
+
+These are my dotfiles
+
+I'll put more details in as I have time
