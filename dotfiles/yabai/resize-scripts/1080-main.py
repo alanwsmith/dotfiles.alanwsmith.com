@@ -114,103 +114,30 @@ class WindowMover():
 if __name__ == '__main__':
     wm = WindowMover()
 
-    # wm.reset_bsp() # shouldn't need to do this unless you change things to float manually
-    wm.stage_apps()
-    wm.move_app_to_space('iTerm2', 1)
-    wm.move_app_to_space('nvALT', 1)
-    wm.move_app_to_space('Google Chrome', 1)
-    wm.move_app_to_space('GitHub Desktop', 2)
-    wm.move_app_to_space('Adobe Photoshop 2022', 3)
-    wm.move_app_to_space('Discord', 5)
-    wm.move_app_to_space('Music', 6)
-    wm.resize_app('iTerm2', 'left:-220:0')
+    # shouldn't need to do this unless you change things to float manually
+    # wm.reset_bsp() 
 
-    wm.stack_apps('nvALT', 'Safari')
-    wm.stack_apps('iTerm2', 'Code')
+    # TODO: Setup the actual moves for a 1080 display
 
-    wm.add_app_after_direction('iTerm2', 'south', 'CodeRunner')
-    wm.add_app_after_direction('CodeRunner', 'east', 'Sublime Text')
+    # stage the apps for to clear the slate then go
+    # wm.stage_apps()
 
-    #wm.resize_app('iTerm2', 'top:0:-360')
-    wm.resize_app('iTerm2', 'bottom:0:120')
-    wm.resize_app('CodeRunner', 'right:120:0')
+    # wm.move_app_to_space('iTerm2', 1)
+    # wm.move_app_to_space('nvALT', 1)
+    # wm.move_app_to_space('Google Chrome', 1)
+    # wm.move_app_to_space('GitHub Desktop', 2)
+    # wm.move_app_to_space('Adobe Photoshop 2022', 3)
+    # wm.move_app_to_space('Discord', 5)
+    # wm.move_app_to_space('Music', 6)
+    # wm.resize_app('iTerm2', 'left:-220:0')
+    # wm.stack_apps('nvALT', 'Safari')
+    # wm.stack_apps('iTerm2', 'Code')
+    # wm.add_app_after_direction('iTerm2', 'south', 'CodeRunner')
+    # wm.add_app_after_direction('CodeRunner', 'east', 'Sublime Text')
+    # wm.resize_app('iTerm2', 'bottom:0:120')
+    # wm.resize_app('CodeRunner', 'right:120:0')
+
 
     wm.select_app('iTerm2')
-
-
-
-    # move_windows()
-
-    # first make sure there are enough spaces
-
-    import sys
-
-    sys.exit()
-
-    windows = get_window_status()
-    apps = {}
-    for window in windows:
-        print(f"{window['id']} - {window['app']}")
-        apps[window['app']] = { 'id': window['id']}
-        # Could set this up to only move if the window is in the first 
-        # space as a possible optimization
-        run_command(f"/opt/homebrew/bin/yabai -m window --focus {window['id']}")
-        run_command('/opt/homebrew/bin/yabai -m window --space 2')
-        #time.sleep(1.0)
-        # You have to focus back on the window to properly update the 
-        # space layout
-        run_command(f"/opt/homebrew/bin/yabai -m window --focus {window['id']}")
-        run_command('/opt/homebrew/bin/yabai -m space --layout float')
-
-    # Assume that the last window is still focused and on the second space at
-    # set it to float
-
-    #time.sleep(1.0)
-
-
-    # and move github desktop in
-    run_command(f"/opt/homebrew/bin/yabai -m window --focus {apps['GitHub Desktop']['id']}")
-    run_command('/opt/homebrew/bin/yabai -m window --space 1')
-
-    # Then go back to iTerm2
-    run_command(f"/opt/homebrew/bin/yabai -m window --focus {apps['iTerm2']['id']}")
-
-    run_command('yabai -m window --insert east')
-
-    run_command(f"/opt/homebrew/bin/yabai -m window --focus {apps['Safari']['id']}")
-    run_command('/opt/homebrew/bin/yabai -m window --space 1')
-
-    run_command(f"/opt/homebrew/bin/yabai -m window --focus {apps['iTerm2']['id']}")
-    run_command('/opt/homebrew/bin/yabai -m window --resize right:400:0')
-
-    run_command(f"/opt/homebrew/bin/yabai -m window --focus {apps['Safari']['id']}")
-    run_command('yabai -m window --insert south')
-
-    run_command(f"/opt/homebrew/bin/yabai -m window --focus {apps['Code']['id']}")
-    run_command('/opt/homebrew/bin/yabai -m window --space 1')
-    # run_command(f"/opt/homebrew/bin/yabai -m window --focus {apps['Sublime Text']['id']}")
-    # run_command('/opt/homebrew/bin/yabai -m window --resize top:0:340')
-
-    run_command(f"/opt/homebrew/bin/yabai -m window --focus {apps['Safari']['id']}")
-    run_command('yabai -m window --insert north')
-
-    run_command(f"/opt/homebrew/bin/yabai -m window --focus {apps['Terminal']['id']}")
-    run_command('/opt/homebrew/bin/yabai -m window --space 1')
-
-    run_command(f"/opt/homebrew/bin/yabai -m window --focus {apps['iTerm2']['id']}")
-    run_command('yabai -m window --insert south')
-
-    run_command(f"/opt/homebrew/bin/yabai -m window --focus {apps['CodeRunner']['id']}")
-    run_command('/opt/homebrew/bin/yabai -m window --space 1')
-
-    run_command(f"/opt/homebrew/bin/yabai -m window --focus {apps['iTerm2']['id']}")
-    run_command('/opt/homebrew/bin/yabai -m window --resize bottom:0:400')
-
-    run_command('yabai -m window --insert north')
-    run_command(f"/opt/homebrew/bin/yabai -m window --focus {apps['Sublime Text']['id']}")
-    run_command('/opt/homebrew/bin/yabai -m window --space 1')
-
-    run_command(f"/opt/homebrew/bin/yabai -m window --focus {apps['iTerm2']['id']}")
-    run_command('/opt/homebrew/bin/yabai -m window --resize top:0:-300')
-
+    print("Resizing complete")
 
