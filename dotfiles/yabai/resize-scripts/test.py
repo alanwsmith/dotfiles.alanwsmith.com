@@ -38,21 +38,60 @@ class AppMover():
                             print(f"Confirmed {app} is in focus")
                             return True
                     time.sleep(0.1)
-        print(f"Could not focus on {app}")
+        print(f"Could not focus on {app}") 
         print("Process halted")
         sys.exit()
 
-    def insert_anchor(self, app, direction):
-        self.focus_app(app)
+    def insert_from_anchor(self, anchor_app, direction, new_app):
+        print(f"Insert from anchor: {anchor_app} - {direction} - {new_app}")
+        self.focus_app(anchor_app)
+        #time.sleep(0.3)
         subprocess.run(f"/opt/homebrew/bin/yabai -m window --insert {direction}".split(' '), check=True)
         # Not sure of a good way to check that this is set, so just adding some time
-        time.sleep(0.1)
+        #time.sleep(0.3)
+        self.move_app_to_space(new_app, self.app_space_id(anchor_app))
 
 
     def move_app_to_space(self, app, space):
         print(f"Moving: {app} to: {space}")
         self.focus_app(app)
         subprocess.run(f"/opt/homebrew/bin/yabai -m window --space {space}".split(' '), check=True)
+        print(f"Confirming move.")
+        for i in range(1, 35):
+            if self.app_space_id(app) == space:
+                print(f"Moved: {app} to: {space}")
+                return True
+            time.sleep(0.1)
+            print('.', end='')
+
+        print("Move didn't work. Trying again")
+        self.focus_app(app)
+        subprocess.run(f"/opt/homebrew/bin/yabai -m window --space {space}".split(' '), check=True)
+        print(f"Confirming move.")
+        for i in range(1, 40):
+            if self.app_space_id(app) == space:
+                print(f"Moved: {app} to: {space}")
+                return True
+            time.sleep(0.1)
+            print('.', end='')
+
+
+        print()
+        print(f"Failed to move {app} to space {space}")
+        print(f"Process halted")
+        sys.exit()
+
+
+    # def place_app_under_app(self, lower_app, upper_app):
+    #     self.focus_app(upper_app)
+    #     # # # # # # # # subprocess.run(f"/opt/homebrew/bin/yabai -m window --insert stack".split(' '), check=True)
+    #     time.sleep(0.1)
+    #     self.focus_app(lower_app)
+
+    def app_space_id(self, app):
+        for window in self.windows():
+            if window['app'] == app:
+                return window['space']
 
     def window_id_for_app(self, app):
         for window in self.windows():
@@ -68,10 +107,17 @@ if __name__ == "__main__":
     am.move_app_to_space('GitHub Desktop', 2)
     am.move_app_to_space('Code', 2)
     am.move_app_to_space('Sublime Text', 2)
-    am.insert_anchor('Terminal', 'east')
-    am.move_app_to_space('Sublime Text', 1)
-    am.insert_anchor('CodeRunner', 'east')
-    am.move_app_to_space('Code', 1)
+
+    am.insert_from_anchor('CodeRunner', 'east', 'Sublime Text')
+    am.insert_from_anchor('Terminal', 'east', 'Code')
+
+    # am.insert_from_anchor('Terminal', 'east', 'Code')
+    # am.insert_from_anchor('CodeRunner', 'east', 'Sublime Text')
+
+    # am.insert_from_anchor('CodeRunner', 'east', 'Sublime Text')
+    # am.move_app_to_space('Sublime Text', 1)
+    #am.move_app_to_space('Code', 1)
+    # am.place_app_under_app('Music', 'Google Chrome')
 
 
 
