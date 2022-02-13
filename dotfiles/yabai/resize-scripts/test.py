@@ -11,9 +11,15 @@ class AppMover():
             if window['app'] == app:
                 return window['space']
 
-    def windows(self):
-        results = subprocess.run('/opt/homebrew/bin/yabai -m query --windows'.split(' '), capture_output=True)
-        return json.loads(results.stdout.decode('utf-8'))
+    def contract_left(self, app, amount):
+        print(f"Contracting left: {app} - {amount}")
+        self.focus_app(app)
+        subprocess.run(f"/opt/homebrew/bin/yabai -m window --resize left:{amount}:0".split(' '), check=True)
+
+    def contract_right(self, app, amount):
+        print(f"Contracting left: {app} - {amount}")
+        self.focus_app(app)
+        subprocess.run(f"/opt/homebrew/bin/yabai -m window --resize right:-{amount}:0".split(' '), check=True)
 
     def ensure_app_is_open(self, app):
         print(f"Ensuring {app} is open")
@@ -29,6 +35,16 @@ class AppMover():
             print(f"Could not open {app} in a reasonalbe time")
             print("Process halted.")
             sys.exit()
+
+    def expand_left(self, app, amount):
+        print(f"Resizing left: {app} - {amount}")
+        self.focus_app(app)
+        subprocess.run(f"/opt/homebrew/bin/yabai -m window --resize left:-{amount}:0".split(' '), check=True)
+
+    def expand_right(self, app, amount):
+        print(f"Resizing left: {app} - {amount}")
+        self.focus_app(app)
+        subprocess.run(f"/opt/homebrew/bin/yabai -m window --resize right:{amount}:0".split(' '), check=True)
 
     def focus_app(self, app):
         self.ensure_app_is_open(app)
@@ -101,11 +117,6 @@ class AppMover():
                 return window['id']
         return None
 
-    def expand_left(self, app, amount):
-        print(f"Resizing left: {app} - {amount}")
-        self.focus_app(app)
-        subprocess.run(f"/opt/homebrew/bin/yabai -m window --resize left:-{amount}:0".split(' '), check=True)
-
     def spaces(self):
         results = subprocess.run(['/opt/homebrew/bin/yabai', '-m', 'query', '--spaces'], capture_output=True, check=True)
         return json.loads(results.stdout.decode('utf-8'))
@@ -115,10 +126,20 @@ class AppMover():
         for window in self.windows():
             self.move_app_to_space(window['app'], staging_space)
 
+    def windows(self):
+        results = subprocess.run('/opt/homebrew/bin/yabai -m query --windows'.split(' '), capture_output=True)
+        return json.loads(results.stdout.decode('utf-8'))
 
 
 if __name__ == "__main__":
     am = AppMover()
+
+
+
+    am.contract_right('Google Chrome', 300)
+
+
+    am.focus_app('iTerm2')
 
     # am.stage_apps()
 
@@ -127,7 +148,8 @@ if __name__ == "__main__":
 
     # am.move_app_to_space('iTerm2', 1)
     # am.insert_from_anchor('iTerm2', 'west', 'Google Chrome')
-    am.expand_left('iTerm2', 300)
+    # am.expand_left('iTerm2', 300)
+    # am.contract_left('iTerm2', 300)
     # am.insert_from_anchor('Google Chrome', 'south', 'nvALT')
     # am.insert_from_anchor('iTerm2', 'south', 'CodeRunner')
     # am.insert_from_anchor('CodeRunner', 'east', 'Sublime Text')
