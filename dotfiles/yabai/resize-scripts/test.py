@@ -26,6 +26,7 @@ class AppMover():
             sys.exit()
 
     def focus_app(self, app):
+        self.ensure_app_is_open(app)
         print(f"Focusing: {app}")
         for window in self.windows():
             if window['app'] == app:
@@ -36,6 +37,7 @@ class AppMover():
                         if check_window['has-focus'] == True and check_window['app'] == app:
                             print(f"Confirmed {app} is in focus")
                             return True
+                    time.sleep(0.1)
         print(f"Could not focus on {app}")
         print("Process halted")
         sys.exit()
@@ -43,12 +45,12 @@ class AppMover():
     def insert_anchor(self, app, direction):
         self.focus_app(app)
         subprocess.run(f"/opt/homebrew/bin/yabai -m window --insert {direction}".split(' '), check=True)
-
+        # Not sure of a good way to check that this is set, so just adding some time
+        time.sleep(0.1)
 
 
     def move_app_to_space(self, app, space):
         print(f"Moving: {app} to: {space}")
-        self.ensure_app_is_open(app)
         self.focus_app(app)
         subprocess.run(f"/opt/homebrew/bin/yabai -m window --space {space}".split(' '), check=True)
 
@@ -64,10 +66,12 @@ class AppMover():
 if __name__ == "__main__":
     am = AppMover()
     am.move_app_to_space('GitHub Desktop', 2)
-    am.move_app_to_space('Code', 1)
+    am.move_app_to_space('Code', 2)
     am.move_app_to_space('Sublime Text', 2)
     am.insert_anchor('Terminal', 'east')
     am.move_app_to_space('Sublime Text', 1)
+    am.insert_anchor('CodeRunner', 'east')
+    am.move_app_to_space('Code', 1)
 
 
 
