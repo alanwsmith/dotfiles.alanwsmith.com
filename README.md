@@ -2,4 +2,5 @@
 
 These are my dotfiles
 
-I'll put more details in as I have time
+I'm just getting started moving things into this 
+repo. I'll add details as things progress
