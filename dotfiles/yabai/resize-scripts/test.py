@@ -25,14 +25,6 @@ class AppMover():
             print("Process halted.")
             sys.exit()
 
-
-    def window_id_for_app(self, app):
-        for window in self.windows():
-            if window['app'] == app:
-                print(f"App {app} has ID: {window['id']}")
-                return window['id']
-        return None
-
     def focus_app(self, app):
         print(f"Focusing: {app}")
         for window in self.windows():
@@ -44,25 +36,39 @@ class AppMover():
                         if check_window['has-focus'] == True and check_window['app'] == app:
                             print(f"Confirmed {app} is in focus")
                             return True
-
         print(f"Could not focus on {app}")
         print("Process halted")
         sys.exit()
 
-
-
+    def insert_anchor(self, app, direction):
+        self.focus_app(app)
+        subprocess.run(f"/opt/homebrew/bin/yabai -m window --insert {direction}".split(' '), check=True)
 
 
 
     def move_app_to_space(self, app, space):
+        print(f"Moving: {app} to: {space}")
         self.ensure_app_is_open(app)
         self.focus_app(app)
-        print(f"Moving: {app} to: {space}")
+        subprocess.run(f"/opt/homebrew/bin/yabai -m window --space {space}".split(' '), check=True)
+
+    def window_id_for_app(self, app):
+        for window in self.windows():
+            if window['app'] == app:
+                print(f"App {app} has ID: {window['id']}")
+                return window['id']
+        return None
+
 
 
 if __name__ == "__main__":
     am = AppMover()
-    am.move_app_to_space('GitHub Desktop', 3)
+    am.move_app_to_space('GitHub Desktop', 2)
+    am.move_app_to_space('Code', 1)
+    am.move_app_to_space('Sublime Text', 2)
+    am.insert_anchor('Terminal', 'east')
+    am.move_app_to_space('Sublime Text', 1)
+
 
 
 
