@@ -131,18 +131,19 @@ if __name__ == '__main__':
     wm.move_app_to_space('Discord', 5)
     wm.move_app_to_space('Music', 6)
     wm.move_app_to_space('Safari', 7)
-    wm.resize_app('iTerm2', 'left:-420:0')
+    wm.resize_app('iTerm2', 'left:-480:0')
 
     wm.stack_apps('iTerm2', 'Code')
     wm.stack_apps('Google Chrome', 'Terminal')
-    wm.stack_apps('nvALT', 'GitHub Desktop')
 
     wm.add_app_after_direction('iTerm2', 'south', 'CodeRunner')
     wm.add_app_after_direction('CodeRunner', 'east', 'Sublime Text')
+    wm.add_app_after_direction('iTerm2', 'north', 'GitHub Desktop')
 
-    #wm.resize_app('iTerm2', 'top:0:-360')
-    wm.resize_app('iTerm2', 'bottom:0:120')
-    wm.resize_app('CodeRunner', 'right:120:0')
+    wm.resize_app('iTerm2', 'bottom:0:440') # Expand window down
+    wm.resize_app('iTerm2', 'top:0:-40') # Expand window up
+
+    wm.resize_app('CodeRunner', 'right:120:0') # Expand window to the right
 
     wm.select_app('iTerm2')
 
