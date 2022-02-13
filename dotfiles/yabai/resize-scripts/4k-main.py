@@ -191,7 +191,7 @@ if __name__ == "__main__":
 
     am.move_app_to_space('iTerm2', 1)
     am.insert_from_anchor('iTerm2', 'west', 'Google Chrome')
-    am.expand_left('iTerm2', 570)
+    am.expand_left('iTerm2', 660)
     am.insert_from_anchor('iTerm2', 'north', 'GitHub Desktop')
     am.expand_top('iTerm2', 390)
     am.insert_from_anchor('iTerm2', 'south', 'CodeRunner')
