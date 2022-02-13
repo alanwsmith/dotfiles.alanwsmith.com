@@ -6,6 +6,11 @@ import sys
 import time
 
 class AppMover():
+    def app_space_id(self, app):
+        for window in self.windows():
+            if window['app'] == app:
+                return window['space']
+
     def windows(self):
         results = subprocess.run('/opt/homebrew/bin/yabai -m query --windows'.split(' '), capture_output=True)
         return json.loads(results.stdout.decode('utf-8'))
@@ -53,6 +58,7 @@ class AppMover():
 
 
     def move_app_to_space(self, app, space):
+        # TODO: Check if the app is already on the space
         print(f"Moving: {app} to: {space}")
         self.focus_app(app)
         subprocess.run(f"/opt/homebrew/bin/yabai -m window --space {space}".split(' '), check=True)
@@ -88,11 +94,6 @@ class AppMover():
     #     time.sleep(0.1)
     #     self.focus_app(lower_app)
 
-    def app_space_id(self, app):
-        for window in self.windows():
-            if window['app'] == app:
-                return window['space']
-
     def window_id_for_app(self, app):
         for window in self.windows():
             if window['app'] == app:
@@ -100,16 +101,41 @@ class AppMover():
                 return window['id']
         return None
 
+    def spaces(self):
+        results = subprocess.run(['/opt/homebrew/bin/yabai', '-m', 'query', '--spaces'], capture_output=True, check=True)
+        return json.loads(results.stdout.decode('utf-8'))
+
+    def stage_apps(self):
+        staging_space = len(self.spaces())
+        for window in self.windows():
+            self.move_app_to_space(window['app'], staging_space)
+
 
 
 if __name__ == "__main__":
     am = AppMover()
-    am.move_app_to_space('GitHub Desktop', 2)
-    am.move_app_to_space('Code', 2)
-    am.move_app_to_space('Sublime Text', 2)
+    am.stage_apps()
 
+    am.move_app_to_space('Adobe Photoshop 2022', 3)
+    am.move_app_to_space('GitHub Desktop', 2)
+
+    am.move_app_to_space('iTerm2', 1)
+    am.insert_from_anchor('iTerm2', 'west', 'Google Chrome')
+    am.insert_from_anchor('Google Chrome', 'south', 'nvALT')
+    am.insert_from_anchor('iTerm2', 'south', 'CodeRunner')
     am.insert_from_anchor('CodeRunner', 'east', 'Sublime Text')
-    am.insert_from_anchor('Terminal', 'east', 'Code')
+
+
+    # am.move_app_to_space('Google Chrome', 1)
+    # am.move_app_to_space('CodeRunner', 1)
+    #am.move_app_to_space('Terminal', 1)
+
+    # am.move_app_to_space('GitHub Desktop', 2)
+    # am.move_app_to_space('Code', 2)
+    # am.move_app_to_space('Sublime Text', 2)
+
+    # am.insert_from_anchor('CodeRunner', 'east', 'Sublime Text')
+    # am.insert_from_anchor('Terminal', 'east', 'Code')
 
     # am.insert_from_anchor('Terminal', 'east', 'Code')
     # am.insert_from_anchor('CodeRunner', 'east', 'Sublime Text')
@@ -118,8 +144,6 @@ if __name__ == "__main__":
     # am.move_app_to_space('Sublime Text', 1)
     #am.move_app_to_space('Code', 1)
     # am.place_app_under_app('Music', 'Google Chrome')
-
-
 
 
 
