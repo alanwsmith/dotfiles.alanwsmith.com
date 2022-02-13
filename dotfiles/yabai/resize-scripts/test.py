@@ -14,7 +14,8 @@ class AppMover():
         print(f"Ensuring {app} is open")
         if self.window_id_for_app(app) == None:
             print(f"Opening {app}")
-            for i in range(1,5):
+            subprocess.run(['open', '-a', app])
+            for i in range(1,50):
                 time.sleep(.1)
                 print('.', end='')
                 if self.window_id_for_app(app) != None:
@@ -26,10 +27,11 @@ class AppMover():
 
 
     def window_id_for_app(self, app):
-        window_id = None
         for window in self.windows():
             if window['app'] == app:
-                print(window)
+                print(f"App {app} has ID: {window['id']}")
+                return window['id']
+        return None
 
 
     def move_app_to_space(self, app, space):
