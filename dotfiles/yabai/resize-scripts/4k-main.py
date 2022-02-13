@@ -77,6 +77,7 @@ class AppMover():
                     for check_window in self.windows():
                         if check_window['has-focus'] == True and check_window['app'] == app:
                             print(f"Confirmed {app} is in focus")
+                            time.sleep(0.1)
                             return True
                     time.sleep(0.1)
         print(f"Could not focus on {app}") 
@@ -149,7 +150,8 @@ class AppMover():
     def stage_apps(self):
         staging_space = len(self.spaces())
         for window in self.windows():
-            self.move_app_to_space(window['app'], staging_space)
+            if window['is-floating'] == False:
+                self.move_app_to_space(window['app'], staging_space)
 
     def windows(self):
         results = subprocess.run('/opt/homebrew/bin/yabai -m query --windows'.split(' '), capture_output=True)
@@ -159,26 +161,26 @@ class AppMover():
 if __name__ == "__main__":
     am = AppMover()
 
-    # am.stage_apps()
-    # am.move_app_to_space('iTerm2', 6)
+    am.stage_apps()
 
-    # am.move_app_to_space('Adobe Photoshop 2022', 2)
-    # am.move_app_to_space('Safari', 5)
-    # am.move_app_to_space('Discord', 6)
-    # am.move_app_to_space('Music', 7)
-    # am.move_app_to_space('1Password 7', 8)
-    # am.move_app_to_space('Keychain Access', 9)
+    am.move_app_to_space('Adobe Photoshop 2022', 2)
+    am.move_app_to_space('Safari', 5)
+    am.move_app_to_space('Discord', 6)
+    am.move_app_to_space('Music', 7)
+    am.move_app_to_space('1Password 7', 8)
+    am.move_app_to_space('Keychain Access', 9)
 
     am.move_app_to_space('iTerm2', 1)
     am.insert_from_anchor('iTerm2', 'west', 'Google Chrome')
-    am.expand_left('iTerm2', 500)
+    am.expand_left('iTerm2', 530)
     am.insert_from_anchor('iTerm2', 'north', 'GitHub Desktop')
-    am.expand_top('iTerm2', 400)
+    am.expand_top('iTerm2', 390)
     am.insert_from_anchor('iTerm2', 'south', 'CodeRunner')
     am.expand_bottom('iTerm2', 130)
     am.insert_from_anchor('CodeRunner', 'east', 'Sublime Text')
     am.insert_from_anchor('Google Chrome', 'south', 'nvALT')
     am.insert_from_anchor('iTerm2', 'east', 'Terminal')
-    am.expand_right('iTerm2', 300)
+    am.expand_right('iTerm2', 280)
+
     am.focus_app('iTerm2')
 
