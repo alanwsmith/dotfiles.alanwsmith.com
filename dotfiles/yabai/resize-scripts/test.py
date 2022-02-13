@@ -11,6 +11,11 @@ class AppMover():
             if window['app'] == app:
                 return window['space']
 
+    def contract_bottom(self, app, amount):
+        print(f"Contracting left: {app} - {amount}")
+        self.focus_app(app)
+        subprocess.run(f"/opt/homebrew/bin/yabai -m window --resize bottom:0:-{amount}".split(' '), check=True)
+
     def contract_left(self, app, amount):
         print(f"Contracting left: {app} - {amount}")
         self.focus_app(app)
@@ -20,6 +25,11 @@ class AppMover():
         print(f"Contracting left: {app} - {amount}")
         self.focus_app(app)
         subprocess.run(f"/opt/homebrew/bin/yabai -m window --resize right:-{amount}:0".split(' '), check=True)
+
+    def contract_top(self, app, amount):
+        print(f"Contracting left: {app} - {amount}")
+        self.focus_app(app)
+        subprocess.run(f"/opt/homebrew/bin/yabai -m window --resize top:0:{amount}".split(' '), check=True)
 
     def ensure_app_is_open(self, app):
         print(f"Ensuring {app} is open")
@@ -36,6 +46,11 @@ class AppMover():
             print("Process halted.")
             sys.exit()
 
+    def expand_bottom(self, app, amount):
+        print(f"Resizing left: {app} - {amount}")
+        self.focus_app(app)
+        subprocess.run(f"/opt/homebrew/bin/yabai -m window --resize bottom:0:{amount}".split(' '), check=True)
+
     def expand_left(self, app, amount):
         print(f"Resizing left: {app} - {amount}")
         self.focus_app(app)
@@ -45,6 +60,11 @@ class AppMover():
         print(f"Resizing left: {app} - {amount}")
         self.focus_app(app)
         subprocess.run(f"/opt/homebrew/bin/yabai -m window --resize right:{amount}:0".split(' '), check=True)
+
+    def expand_top(self, app, amount):
+        print(f"Resizing left: {app} - {amount}")
+        self.focus_app(app)
+        subprocess.run(f"/opt/homebrew/bin/yabai -m window --resize top:0:-{amount}".split(' '), check=True)
 
     def focus_app(self, app):
         self.ensure_app_is_open(app)
@@ -134,11 +154,17 @@ class AppMover():
 if __name__ == "__main__":
     am = AppMover()
 
+    # am.expand_right('Google Chrome', 300)
+    # am.contract_right('Google Chrome', 300)
 
+    # am.insert_from_anchor('Google Chrome', 'south', 'nvALT')
 
-    am.contract_right('Google Chrome', 300)
-
-
+    # am.expand_top('nvALT', 300)
+    # am.contract_top('nvALT', 300)
+    # am.expand_top('Google Chrome', 300)
+    am.expand_bottom('Google Chrome', 300)
+    #
+    am.contract_bottom('Google Chrome', 300)
     am.focus_app('iTerm2')
 
     # am.stage_apps()
