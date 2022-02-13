@@ -108,7 +108,6 @@ class AppMover():
                     return True
                 time.sleep(0.1)
                 print('.', end='')
-
             print("Move didn't work. Trying again")
             self.focus_app(app)
             subprocess.run(f"/opt/homebrew/bin/yabai -m window --space {space}".split(' '), check=True)
@@ -159,62 +158,24 @@ class AppMover():
 
 if __name__ == "__main__":
     am = AppMover()
-    # am.stage_apps()
+    am.stage_apps()
 
-    # am.expand_right('Google Chrome', 300)
-    # am.contract_right('Google Chrome', 300)
+    am.move_app_to_space('Adobe Photoshop 2022', 2)
+    am.move_app_to_space('Safari', 5)
+    am.move_app_to_space('Discord', 6)
+    am.move_app_to_space('Music', 7)
 
-    # am.insert_from_anchor('Google Chrome', 'south', 'nvALT')
-
-    # am.expand_top('nvALT', 300)
-    # am.contract_top('nvALT', 300)
-    # am.expand_top('Google Chrome', 300)
-    #am.expand_bottom('Google Chrome', 300)
-    #
-    #am.contract_bottom('Google Chrome', 300)
-
-    # am.expand_left('iTerm2', 300)
-
-
-    am.move_app_to_space('Music', 4)
-    am.place_app_under_app('Music', 'iTerm2')
+    am.move_app_to_space('iTerm2', 1)
+    am.insert_from_anchor('iTerm2', 'west', 'Google Chrome')
+    am.expand_left('iTerm2', 500)
+    am.insert_from_anchor('iTerm2', 'north', 'GitHub Desktop')
+    am.expand_top('iTerm2', 400)
+    am.insert_from_anchor('iTerm2', 'south', 'CodeRunner')
+    am.expand_bottom('iTerm2', 130)
+    am.insert_from_anchor('CodeRunner', 'east', 'Sublime Text')
+    am.insert_from_anchor('Google Chrome', 'south', 'nvALT')
+    am.insert_from_anchor('iTerm2', 'east', 'Terminal')
+    am.expand_right('iTerm2', 300)
 
     am.focus_app('iTerm2')
-
-
-    # am.move_app_to_space('Adobe Photoshop 2022', 3)
-    # am.move_app_to_space('GitHub Desktop', 2)
-
-    # am.move_app_to_space('iTerm2', 1)
-    # am.insert_from_anchor('iTerm2', 'west', 'Google Chrome')
-    # am.expand_left('iTerm2', 300)
-    # am.contract_left('iTerm2', 300)
-    # am.insert_from_anchor('Google Chrome', 'south', 'nvALT')
-    # am.insert_from_anchor('iTerm2', 'south', 'CodeRunner')
-    # am.insert_from_anchor('CodeRunner', 'east', 'Sublime Text')
-
-
-    # am.move_app_to_space('Google Chrome', 1)
-    # am.move_app_to_space('CodeRunner', 1)
-    #am.move_app_to_space('Terminal', 1)
-
-    # am.move_app_to_space('GitHub Desktop', 2)
-    # am.move_app_to_space('Code', 2)
-    # am.move_app_to_space('Sublime Text', 2)
-
-    # am.insert_from_anchor('CodeRunner', 'east', 'Sublime Text')
-    # am.insert_from_anchor('Terminal', 'east', 'Code')
-
-    # am.insert_from_anchor('Terminal', 'east', 'Code')
-    # am.insert_from_anchor('CodeRunner', 'east', 'Sublime Text')
-
-    # am.insert_from_anchor('CodeRunner', 'east', 'Sublime Text')
-    # am.move_app_to_space('Sublime Text', 1)
-    #am.move_app_to_space('Code', 1)
-    # am.place_app_under_app('Music', 'Google Chrome')
-
-
-
-# close stuff to start with:
-#subprocess.run(['osascript', '-e', 'quit app "GitHub Desktop"'])
 
