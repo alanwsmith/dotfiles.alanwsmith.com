@@ -94,7 +94,7 @@ class AppMover():
 
 
     def move_app_to_space(self, app, space):
-        # TODO: Check if the app is already on the space
+        # TODO: Check if the app is already on the space and don't mess with it if it is
         print(f"Moving: {app} to: {space}")
         self.focus_app(app)
         subprocess.run(f"/opt/homebrew/bin/yabai -m window --space {space}".split(' '), check=True)
@@ -116,19 +116,16 @@ class AppMover():
                 return True
             time.sleep(0.1)
             print('.', end='')
-
-
         print()
         print(f"Failed to move {app} to space {space}")
         print(f"Process halted")
         sys.exit()
 
-
-    # def place_app_under_app(self, lower_app, upper_app):
-    #     self.focus_app(upper_app)
-    #     # # # # # # # # subprocess.run(f"/opt/homebrew/bin/yabai -m window --insert stack".split(' '), check=True)
-    #     time.sleep(0.1)
-    #     self.focus_app(lower_app)
+    def place_app_under_app(self, lower_app, upper_app):
+        self.focus_app(upper_app)
+        subprocess.run(f"/opt/homebrew/bin/yabai -m window --insert stack".split(' '), check=True)
+        self.focus_app(lower_app)
+        self.move_app_to_space(lower_app, self.app_space_id(upper_app))
 
     def window_id_for_app(self, app):
         for window in self.windows():
@@ -162,9 +159,12 @@ if __name__ == "__main__":
     # am.expand_top('nvALT', 300)
     # am.contract_top('nvALT', 300)
     # am.expand_top('Google Chrome', 300)
-    am.expand_bottom('Google Chrome', 300)
+    #am.expand_bottom('Google Chrome', 300)
     #
-    am.contract_bottom('Google Chrome', 300)
+    #am.contract_bottom('Google Chrome', 300)
+
+    am.place_app_under_app('Music', 'iTerm2')
+
     am.focus_app('iTerm2')
 
     # am.stage_apps()
