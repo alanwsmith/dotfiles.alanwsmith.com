@@ -122,10 +122,16 @@ class AppMover():
         sys.exit()
 
     def place_app_under_app(self, lower_app, upper_app):
-        self.focus_app(upper_app)
-        subprocess.run(f"/opt/homebrew/bin/yabai -m window --insert stack".split(' '), check=True)
-        self.focus_app(lower_app)
-        self.move_app_to_space(lower_app, self.app_space_id(upper_app))
+        print(f"Placing {lower_app} under {upper_app}")
+        if self.app_space_id(lower_app) == self.app_space_id(upper_app):
+            print(f"Skipping: {lower_app} is already in space {self.app_space_id(lower_app)} with {upper_app}")
+            return False
+        else:
+            self.focus_app(upper_app)
+            subprocess.run(f"/opt/homebrew/bin/yabai -m window --insert stack".split(' '), check=True)
+            self.focus_app(lower_app)
+            self.move_app_to_space(lower_app, self.app_space_id(upper_app))
+            print(f"Placed: {lower_app} under {upper_app}")
 
     def window_id_for_app(self, app):
         for window in self.windows():
