@@ -113,6 +113,7 @@ class AppMover():
             for i in range(1, 20):
                 if self.app_space_id(app) == space:
                     print(f"- Moved: {app} to: {space}")
+                    time.sleep(self.time_padding)
                     return True
                 time.sleep(self.time_padding)
                 print('.', end='')
@@ -123,6 +124,7 @@ class AppMover():
             for i in range(1, 30):
                 if self.app_space_id(app) == space:
                     print(f"- Moved: {app} to: {space}")
+                    time.sleep(self.time_padding)
                     return True
                 time.sleep(self.time_padding)
                 print('.', end='')
@@ -133,6 +135,7 @@ class AppMover():
             for i in range(1, 30):
                 if self.app_space_id(app) == space:
                     print(f"- Moved: {app} to: {space}")
+                    time.sleep(self.time_padding)
                     return True
                 time.sleep(self.time_padding)
                 print('.', end='')

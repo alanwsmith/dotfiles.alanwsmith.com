@@ -5,139 +5,210 @@ import subprocess
 import sys
 import time
 
-# This doesn't currently deal with two windows for the same app
-
-# Theres a bunch of sleep lines in that prevent race conditions. 
-# It slows things down, but it works. I've got an idea about how 
-# to bounch of the window and space status queries to make it 
-# faster. That's for a future iteration. 
-
-# Note that app window names don't always match what's shown in 
-# the menu bar. e.g. 'Photoshop' is really something like 
-# 'Adobe Photoshop 2022'. You can check them with:
-# 
-# yabai -m query --windows
-
-
-
-class WindowMover():
+class AppMover():
     def __init__(self):
-        self.windows = self.get_window_status()
-        self.spaces = self.get_spaces_status()
-        self.apps = {}
-        self.map_app_names()
+        self.time_padding = 0.2
 
-    def add_app_after_direction(self, initial_app, direction, new_app):
-        print(f"Adding app {new_app} to the {direction} of {initial_app}")
-        for window in self.windows:
-            if (window['app'] == initial_app):
-                target_space = window['space']
-                subprocess.run(f"/opt/homebrew/bin/yabai -m window --focus {self.apps[initial_app]['id']}".split(' '), check=True)
-                subprocess.run(f"/opt/homebrew/bin/yabai -m window --insert {direction}".split(' '), check=True)
-                subprocess.run(f"/opt/homebrew/bin/yabai -m window --focus {self.apps[new_app]['id']}".split(' '), check=True)
-                subprocess.run(f"/opt/homebrew/bin/yabai -m window --space {target_space}".split(' '), check=True)
-                subprocess.run(f"/opt/homebrew/bin/yabai -m window --focus {self.apps[initial_app]['id']}".split(' '), check=True)
+    def app_space_id(self, app):
+        for window in self.windows():
+            if window['app'] == app:
+                return window['space']
 
-    def get_spaces_status(self):
+    def contract_bottom(self, app, amount):
+        print(f"Contracting left: {app} - {amount}")
+        self.focus_app(app)
+        subprocess.run(f"/opt/homebrew/bin/yabai -m window --resize bottom:0:-{amount}".split(' '), check=True)
+
+    def contract_left(self, app, amount):
+        print(f"Contracting left: {app} - {amount}")
+        self.focus_app(app)
+        subprocess.run(f"/opt/homebrew/bin/yabai -m window --resize left:{amount}:0".split(' '), check=True)
+
+    def contract_right(self, app, amount):
+        print(f"Contracting left: {app} - {amount}")
+        self.focus_app(app)
+        subprocess.run(f"/opt/homebrew/bin/yabai -m window --resize right:-{amount}:0".split(' '), check=True)
+
+    def contract_top(self, app, amount):
+        print(f"Contracting left: {app} - {amount}")
+        self.focus_app(app)
+        subprocess.run(f"/opt/homebrew/bin/yabai -m window --resize top:0:{amount}".split(' '), check=True)
+
+    def ensure_app_is_open(self, app):
+        print(f"Ensuring {app} is open")
+        if self.window_id_for_app(app) == None:
+            print(f"Opening {app}")
+            subprocess.run(['open', '-a', app])
+            for i in range(1,50):
+                time.sleep(self.time_padding)
+                print('.', end='')
+                if self.window_id_for_app(app) != None:
+                    print(f"Opened {app}")
+                    return True
+            print(f"Could not open {app} in a reasonalbe time")
+            print("Process halted.")
+            sys.exit()
+
+    def expand_bottom(self, app, amount):
+        print(f"Resizing left: {app} - {amount}")
+        self.focus_app(app)
+        subprocess.run(f"/opt/homebrew/bin/yabai -m window --resize bottom:0:{amount}".split(' '), check=True)
+
+    def expand_left(self, app, amount):
+        print(f"Resizing left: {app} - {amount}")
+        self.focus_app(app)
+        subprocess.run(f"/opt/homebrew/bin/yabai -m window --resize left:-{amount}:0".split(' '), check=True)
+
+    def expand_right(self, app, amount):
+        print(f"Resizing left: {app} - {amount}")
+        self.focus_app(app)
+        subprocess.run(f"/opt/homebrew/bin/yabai -m window --resize right:{amount}:0".split(' '), check=True)
+
+    def expand_top(self, app, amount):
+        print(f"Resizing left: {app} - {amount}")
+        self.focus_app(app)
+        subprocess.run(f"/opt/homebrew/bin/yabai -m window --resize top:0:-{amount}".split(' '), check=True)
+
+    def focus_app(self, app):
+        print(f"Switching focus to {app}")
+        # See if it's already in focus
+        for window in self.windows():
+            if window['app'] == app and window['has-focus']:
+                print(f"{app} already has focus")
+                return True
+        # otherwise make sure it's open and switch focus to it
+        self.ensure_app_is_open(app)
+        print(f"Focusing: {app}")
+        for window in self.windows():
+            if window['app'] == app:
+                subprocess.run(f"/opt/homebrew/bin/yabai -m window --focus {window['id']}".split(' '), check=True)
+                for i in range(1,14):
+                    print(f"Checking focus on: {app}")
+                    for check_window in self.windows():
+                        if check_window['has-focus'] == True and check_window['app'] == app:
+                            print(f"Confirmed {app} is in focus")
+                            # need this padding to let the system catch up
+                            time.sleep(self.time_padding)
+                            return True
+                    time.sleep(self.time_padding)
+        print(f"Could not focus on {app}")
+        print("Process halted")
+        sys.exit()
+
+    def insert_from_anchor(self, anchor_app, direction, new_app):
+        print(f"Insert from anchor: {anchor_app} - {direction} - {new_app}")
+        self.focus_app(anchor_app)
+        subprocess.run(f"/opt/homebrew/bin/yabai -m window --insert {direction}".split(' '), check=True)
+        self.move_app_to_space(new_app, self.app_space_id(anchor_app))
+
+    def move_app_to_space(self, app, space):
+        print(f"Moving: {app} to: {space}")
+        if self.app_space_id(app) == space:
+            print(f"No need to move. {app} is already on space {space}")
+        else:
+            # TODO: Make this a recursive function instead of copy paste    
+            self.focus_app(app)
+            subprocess.run(f"/opt/homebrew/bin/yabai -m window --space {space}".split(' '), check=True)
+            print(f"Confirming {app} moved to space {space}")
+            for i in range(1, 20):
+                if self.app_space_id(app) == space:
+                    print(f"- Moved: {app} to: {space}")
+                    return True
+                    time.sleep(self.time_padding)
+                time.sleep(self.time_padding)
+                print('.', end='')
+
+            print("- Move didn't work. Trying again")
+            self.focus_app(app)
+            subprocess.run(f"/opt/homebrew/bin/yabai -m window --space {space}".split(' '), check=True)
+            for i in range(1, 30):
+                if self.app_space_id(app) == space:
+                    print(f"- Moved: {app} to: {space}")
+                    return True
+                    time.sleep(self.time_padding)
+                time.sleep(self.time_padding)
+                print('.', end='')
+
+            print("- Move didn't work. Trying again")
+            self.focus_app(app)
+            subprocess.run(f"/opt/homebrew/bin/yabai -m window --space {space}".split(' '), check=True)
+            for i in range(1, 30):
+                if self.app_space_id(app) == space:
+                    print(f"- Moved: {app} to: {space}")
+                    return True
+                    time.sleep(self.time_padding)
+                time.sleep(self.time_padding)
+                print('.', end='')
+
+            print()
+            print(f"Failed to move {app} to space {space}")
+            print(f"Process halted")
+            sys.exit()
+
+    def place_app_under_app(self, lower_app, upper_app):
+        print(f"Placing {lower_app} under {upper_app}")
+        if self.app_space_id(lower_app) == self.app_space_id(upper_app):
+            print(f"Skipping: {lower_app} is already in space {self.app_space_id(lower_app)} with {upper_app}")
+            return False
+        else:
+            self.focus_app(upper_app)
+            subprocess.run(f"/opt/homebrew/bin/yabai -m window --insert stack".split(' '), check=True)
+            self.focus_app(lower_app)
+            self.move_app_to_space(lower_app, self.app_space_id(upper_app))
+            print(f"Placed: {lower_app} under {upper_app}")
+
+    def window_id_for_app(self, app):
+        for window in self.windows():
+            if window['app'] == app:
+                print(f"App {app} has ID: {window['id']}")
+                return window['id']
+        return None
+
+    def spaces(self):
         results = subprocess.run(['/opt/homebrew/bin/yabai', '-m', 'query', '--spaces'], capture_output=True, check=True)
         return json.loads(results.stdout.decode('utf-8'))
 
-    def get_window_status(self):
-        results = subprocess.run(['/opt/homebrew/bin/yabai', '-m', 'query', '--windows'], capture_output=True, check=True)
+    def stage_apps(self):
+        staging_space = len(self.spaces())
+        for window in self.windows():
+            if window['is-floating'] == False:
+                self.move_app_to_space(window['app'], staging_space)
+
+    def windows(self):
+        results = subprocess.run('/opt/homebrew/bin/yabai -m query --windows'.split(' '), capture_output=True)
         return json.loads(results.stdout.decode('utf-8'))
 
-    def map_app_names(self):
-        for window in self.windows:
-            self.apps[window['app']] = { 'id': window['id']}
 
-    def stage_apps(self):
-        for window in self.windows:
-            print(f"Staging app: {window['app']} in window {window['id']}")
-            subprocess.run(f"/opt/homebrew/bin/yabai -m window --focus {window['id']}".split(' '), check=True)
-            subprocess.run(f"/opt/homebrew/bin/yabai -m window --space {len(self.spaces)}".split(' '), check=True)
+if __name__ == "__main__":
+    am = AppMover()
+    am.time_padding = 0.2
 
-    def move_app_to_space(self, app, space):
-        print(f"Moving app {app} to space {space}")
-        # TODO: Figure out which of these delays is necessary 
-        # and see if it has to do with space moves and see if
-        # there's a way to optimize it.
-        time.sleep(0.8)
-        subprocess.run(f"/opt/homebrew/bin/yabai -m window --focus {self.apps[app]['id']}".split(' '), check=True)
-        time.sleep(0.8)
-        subprocess.run(f"/opt/homebrew/bin/yabai -m window --space {space}".split(' '), check=True)
-        time.sleep(0.8)
-        subprocess.run(f"/opt/homebrew/bin/yabai -m window --focus {self.apps[app]['id']}".split(' '), check=True)
-        time.sleep(0.8)
+    am.stage_apps()
 
-    def reset_bsp(self):
-        # Just move the current window across all spaces and reset them to bsp
-        # Not totally sure this works
-        for space in self.spaces:
-            print(f"Resetting space {space['index']} to bsp")
-            subprocess.run(f"/opt/homebrew/bin/yabai -m window --focus {self.windows[0]['id']}".split(' '), check=True)
-            time.sleep(1)
-            subprocess.run(f"/opt/homebrew/bin/yabai -m window --space {space['index']}".split(' '), check=True)
-            time.sleep(1)
-            subprocess.run(f"/opt/homebrew/bin/yabai -m window --focus {self.windows[0]['id']}".split(' '), check=True)
-            time.sleep(1)
-            subprocess.run(f"/opt/homebrew/bin/yabai -m space --layout bsp".split(' '))
-            time.sleep(0.3)
+    am.move_app_to_space('GitHub Desktop', 2)
+    am.move_app_to_space('Adobe Photoshop 2022', 3)
+    am.move_app_to_space('DB Browser for SQLite', 4)
+    am.move_app_to_space('Code', 5)
+    am.move_app_to_space('Discord', 6)
+    am.move_app_to_space('Music', 7)
+    am.move_app_to_space('1Password 7', 8)
+    # am.move_app_to_space('Keychain Access', 9)
 
-    def resize_app(self, app, details):
-        print(f"Resizing app: {app} - {details}")
-        subprocess.run(f"/opt/homebrew/bin/yabai -m window --focus {self.apps[app]['id']}".split(' '), check=True)
-        time.sleep(0.5)
-        subprocess.run(f"/opt/homebrew/bin/yabai -m window --resize {details}".split(' '), check=True)
-        time.sleep(0.5)
+    am.move_app_to_space('iTerm2', 1)
+    am.insert_from_anchor('iTerm2', 'west', 'Google Chrome')
+    am.expand_left('iTerm2', 280)
+    am.insert_from_anchor('Google Chrome', 'south', 'nvALT')
 
-    def select_app(self, app):
-        print(f"Selecting app: {app}")
-        subprocess.run(f"/opt/homebrew/bin/yabai -m window --focus {self.apps[app]['id']}".split(' '), check=True)
-        time.sleep(0.5)
+    # am.insert_from_anchor('iTerm2', 'north', 'GitHub Desktop')
+    # am.expand_top('iTerm2', 390)
+    # am.insert_from_anchor('iTerm2', 'south', 'CodeRunner')
+    # am.expand_bottom('iTerm2', 130)
+    # am.insert_from_anchor('CodeRunner', 'east', 'Sublime Text')
+    # am.insert_from_anchor('iTerm2', 'east', 'Terminal')
+    # am.expand_right('iTerm2', 300)
+    # am.insert_from_anchor('GitHub Desktop', 'east', 'Safari')
+    # am.expand_right('GitHub Desktop', 140)
 
-    def stack_apps(self, top_app, bottom_app):
-        print(f"Stacking apps: {top_app} - {bottom_app}")
-        for window in self.windows:
-            if (window['app'] == top_app):
-                target_space = window['space']
-                time.sleep(0.5)
-                subprocess.run(f"/opt/homebrew/bin/yabai -m window --focus {self.apps[top_app]['id']}".split(' '), check=True)
-                subprocess.run(f"/opt/homebrew/bin/yabai -m window --insert stack".split(' '), check=True)
-                subprocess.run(f"/opt/homebrew/bin/yabai -m window --focus {self.apps[bottom_app]['id']}".split(' '), check=True)
-                time.sleep(0.5)
-                subprocess.run(f"/opt/homebrew/bin/yabai -m window --space {target_space}".split(' '), check=True)
-                time.sleep(0.5)
-                subprocess.run(f"/opt/homebrew/bin/yabai -m window --focus {self.apps[top_app]['id']}".split(' '), check=True)
-
-
-
-if __name__ == '__main__':
-    wm = WindowMover()
-
-    # shouldn't need to do this unless you change things to float manually
-    # wm.reset_bsp() 
-
-    # TODO: Setup the actual moves for a 1080 display
-
-    # stage the apps for to clear the slate then go
-    # wm.stage_apps()
-
-    # wm.move_app_to_space('iTerm2', 1)
-    # wm.move_app_to_space('nvALT', 1)
-    # wm.move_app_to_space('Google Chrome', 1)
-    # wm.move_app_to_space('GitHub Desktop', 2)
-    # wm.move_app_to_space('Adobe Photoshop 2022', 3)
-    # wm.move_app_to_space('Discord', 5)
-    # wm.move_app_to_space('Music', 6)
-    # wm.resize_app('iTerm2', 'left:-220:0')
-    # wm.stack_apps('nvALT', 'Safari')
-    # wm.stack_apps('iTerm2', 'Code')
-    # wm.add_app_after_direction('iTerm2', 'south', 'CodeRunner')
-    # wm.add_app_after_direction('CodeRunner', 'east', 'Sublime Text')
-    # wm.resize_app('iTerm2', 'bottom:0:120')
-    # wm.resize_app('CodeRunner', 'right:120:0')
-
-
-    wm.select_app('iTerm2')
-    print("Resizing complete")
+    am.focus_app('Music')
+    am.focus_app('iTerm2')
 
