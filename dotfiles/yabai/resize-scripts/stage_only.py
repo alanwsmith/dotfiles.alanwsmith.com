@@ -5,60 +5,12 @@ import subprocess
 import sys
 import time
 
-# you can see window names with:
-# yabai -m query --windows
-
-
-# TODO: Figure out how to set this up so that
-# it opens the app which is named differently.
-# One example is code.
-
-# TODO: Setup to split any apps that aren't explitly
-# defined across any spaces that haven't been used. 
 
 def move_things_into_place():
 
     am = AppMover()
     am.stage_apps()
 
-    # TODO Create a map of app names that show up in the 
-    # windows vs the ones that are launched so the app 
-    # can open them as needed. 
-
-    # TODO: Figure out how to deal with multiple windows
-    # Probably pick one and use it's ID for the movement
-    # and then just stack the other ones behind it?
-
-    # Send a notification when done, or when there's 
-    # Trouble
-
-    am.move_app_to_space('Adobe Photoshop 2022', 2)
-    am.move_app_to_space('Code', 3)
-
-    am.move_app_to_space('Safari', 6)
-    am.move_app_to_space('Music', 7)
-    am.move_app_to_space('Discord', 8)
-    am.move_app_to_space('1Password 7', 9)
-    am.insert_from_anchor('1Password 7', 'south', 'Keychain Access')
-
-    am.move_app_to_space('iTerm2', 1)
-    am.insert_from_anchor('iTerm2', 'west', 'Google Chrome')
-    am.expand_left('iTerm2', 660)
-    am.insert_from_anchor('iTerm2', 'north', 'GitHub Desktop')
-    am.expand_top('iTerm2', 390)
-    am.insert_from_anchor('iTerm2', 'south', 'CodeRunner')
-    am.expand_bottom('iTerm2', 130)
-    am.insert_from_anchor('CodeRunner', 'east', 'DBeaver')
-    am.insert_from_anchor('Google Chrome', 'south', 'nvALT')
-    am.insert_from_anchor('iTerm2', 'east', 'Sublime Text')
-    am.expand_right('iTerm2', 300)
-
-    am.insert_from_anchor('GitHub Desktop', 'east', 'Soulver 3')
-    am.expand_right('GitHub Desktop', 140)
-
-    am.focus_app('Google Chrome')
-
-    am.focus_app('Safari')
     am.focus_app('iTerm2')
 
 
