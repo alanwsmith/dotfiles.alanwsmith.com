@@ -8,11 +8,9 @@ export TERM=screen-256color
 # Include public functions 
 
 if [ -d "/Users/alan/workshop/dotfiles.alanwsmith.com/dotfiles/cli" ] 
-    echo "here"
 then 
   for file in /Users/alan/workshop/dotfiles.alanwsmith.com/dotfiles/cli/*.zsh
   do 
-      echo "and here"
     source "$file"
   done
 fi 
