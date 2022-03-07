@@ -7,9 +7,9 @@ export TERM=screen-256color
 ######################################################################
 # Include public functions 
 
-if [ -d "/Users/alan/workshop/dotfiles.alanwsmith.com/dotfiles/cli" ] 
+if [ -d "/Users/alan/workshop/dotfiles.alanwsmith.com/dotfiles/cli-shortcuts" ] 
 then 
-  for file in /Users/alan/workshop/dotfiles.alanwsmith.com/dotfiles/cli/*.zsh
+  for file in /Users/alan/workshop/dotfiles.alanwsmith.com/dotfiles/cli-shortcuts/*.zsh
   do 
     source "$file"
   done
