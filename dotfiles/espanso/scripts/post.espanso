@@ -3,7 +3,7 @@
 TIMESTAMP=$(date +%Y-%m-%dT%H:%M:%S)
 
 echo "---"
-echo "blurb: ''"
+echo 'blurb: ""' 
 echo "categories:"
 echo "- Miscellaneous"
 echo "date: '$TIMESTAMP'"
