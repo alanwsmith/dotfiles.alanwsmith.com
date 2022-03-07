@@ -48,7 +48,7 @@ def move_things_into_place():
     am.expand_top('iTerm2', 390)
     am.insert_from_anchor('iTerm2', 'south', 'CodeRunner')
     am.expand_bottom('iTerm2', 130)
-    am.insert_from_anchor('CodeRunner', 'east', 'DBeaver')
+    am.insert_from_anchor('CodeRunner', 'east', 'DBeaver Community')
     am.insert_from_anchor('Google Chrome', 'south', 'nvALT')
     am.insert_from_anchor('iTerm2', 'east', 'Sublime Text')
     am.expand_right('iTerm2', 300)
