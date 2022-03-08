@@ -7,6 +7,10 @@
 # provide links to all the files so you can copy
 # and paste them that way (instead of letting)
 # the full directory be browsed. 
+#
+# You can get the public URL from:
+# http://127.0.0.1:4040/api/tunnels
+#
 
 function ngs () {
   SHARE_DIR=/Users/alan/_web_share_tmp
