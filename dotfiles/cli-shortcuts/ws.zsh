@@ -1,0 +1,3 @@
+function ws () {
+  cd ~/workshop
+}
