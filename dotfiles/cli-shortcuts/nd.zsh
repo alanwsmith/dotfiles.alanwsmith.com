@@ -1,0 +1,3 @@
+function nd () {
+  netlify dev
+}

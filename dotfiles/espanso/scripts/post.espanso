@@ -1,0 +1,14 @@
+#!/bin/bash 
+
+TIMESTAMP=$(date +%Y-%m-%dT%H:%M:%S)
+
+echo "---"
+echo 'blurb: ""' 
+echo "categories:"
+echo "- Miscellaneous"
+echo "date: '$TIMESTAMP'"
+echo "id: `/Users/alan/go/bin/ksuid | cut -c1-12 | tr '[:upper:]' '[:lower:]'`"
+echo "status: scratch"
+echo "type: post"
+echo "---"
+echo ""

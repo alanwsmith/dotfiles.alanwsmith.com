@@ -1,0 +1,3 @@
+function tl () {
+  tree | less
+}
