@@ -64,7 +64,7 @@ class AppMover():
                 return window['space']
 
     def contract_bottom(self, app, amount):
-        print(f"Contracting left: {app} - {amount}")
+        print(f"Contracting bottom: {app} - {amount}")
         self.focus_app(app)
         subprocess.run(f"{self.yabai_path} -m window --resize bottom:0:-{amount}".split(' '), check=True)
 
@@ -74,12 +74,12 @@ class AppMover():
         subprocess.run(f"{self.yabai_path} -m window --resize left:{amount}:0".split(' '), check=True)
 
     def contract_right(self, app, amount):
-        print(f"Contracting left: {app} - {amount}")
+        print(f"Contracting right: {app} - {amount}")
         self.focus_app(app)
         subprocess.run(f"{self.yabai_path} -m window --resize right:-{amount}:0".split(' '), check=True)
 
     def contract_top(self, app, amount):
-        print(f"Contracting left: {app} - {amount}")
+        print(f"Contracting top: {app} - {amount}")
         self.focus_app(app)
         subprocess.run(f"{self.yabai_path} -m window --resize top:0:{amount}".split(' '), check=True)
 
@@ -99,7 +99,7 @@ class AppMover():
             sys.exit()
 
     def expand_bottom(self, app, amount):
-        print(f"Resizing left: {app} - {amount}")
+        print(f"Resizing bottom: {app} - {amount}")
         self.focus_app(app)
         subprocess.run(f"{self.yabai_path} -m window --resize bottom:0:{amount}".split(' '), check=True)
 
@@ -109,12 +109,12 @@ class AppMover():
         subprocess.run(f"{self.yabai_path} -m window --resize left:-{amount}:0".split(' '), check=True)
 
     def expand_right(self, app, amount):
-        print(f"Resizing left: {app} - {amount}")
+        print(f"Resizing right: {app} - {amount}")
         self.focus_app(app)
         subprocess.run(f"{self.yabai_path} -m window --resize right:{amount}:0".split(' '), check=True)
 
     def expand_top(self, app, amount):
-        print(f"Resizing left: {app} - {amount}")
+        print(f"Resizing top: {app} - {amount}")
         self.focus_app(app)
         subprocess.run(f"{self.yabai_path} -m window --resize top:0:-{amount}".split(' '), check=True)
 
