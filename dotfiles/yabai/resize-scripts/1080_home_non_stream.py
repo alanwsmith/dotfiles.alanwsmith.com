@@ -23,7 +23,7 @@ if __name__ == "__main__":
     am.insert_from_anchor('Google Chrome', 'south', 'nvALT')
     am.expand_left('iTerm2', 180)
 
-    am.move_app_to_space('GitHub Desktop', 2)
+    am.move_app_to_space('Fork', 2)
 
     am.move_app_to_space('Code', 3)
 
@@ -33,9 +33,10 @@ if __name__ == "__main__":
     am.move_app_to_space('Adobe Photoshop 2022', 5)
 
     am.move_app_to_space('Soulver 3', 6)
+    am.move_app_to_space('Lightroom Classic', 7)
 
     # Screen 2 - Desktops 9-16
-    # am.move_app_to_space('Safari', 9)
+    am.move_app_to_space('Safari', 9)
     am.move_app_to_space('1Password 7', 10)
     am.insert_from_anchor('1Password 7', 'south', 'Keychain Access')
     am.move_app_to_space('Discord', 11)
