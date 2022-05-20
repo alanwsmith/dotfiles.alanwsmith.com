@@ -1,0 +1,454 @@
+####################################################################
+# Exports 
+
+export TERM=screen-256color
+
+if [ "$(tput cols)" -gt 65 ]; then
+    sort -R /Users/alan/workshop/dotfiles.alanwsmith.com/dotfiles/zsh/quotes | head -1 | sed 's/--/\n    --/' | sed 's/$/\n/' | fold -w 64 -s
+else
+    sort -R /Users/alan/workshop/dotfiles.alanwsmith.com/dotfiles/zsh/quotes | head -1 | sed 's/--/\n    --/'
+fi
+
+######################################################################
+# Include public functions 
+
+if [ -d "/Users/alan/workshop/dotfiles.alanwsmith.com/dotfiles/cli-shortcuts" ] 
+then 
+  for file in /Users/alan/workshop/dotfiles.alanwsmith.com/dotfiles/cli-shortcuts/*.zsh
+  do 
+    source "$file"
+  done
+fi 
+
+
+######################################################################
+# TODO: Get private functions into a directory
+
+if [ -f ~/.zshrc-private ]; then
+    source ~/.zshrc-private
+fi
+
+
+######################################################################
+# Alias style functions 
+
+# TODO: Move these to their own files
+
+function sva () {
+    source venv/bin/activate
+}
+
+function rc () {
+    exec zsh 
+}
+
+function e () {
+    exit 
+}
+
+# TODO: Update this so it takes more than one argument
+function nv () {
+	nvim $1
+}
+
+# Run ps then grep the results
+function psg () {
+    if [ "$1" ]
+    then
+        if [ "$2" ]
+        then
+            echo "You passed too many arguments"
+        else
+            ps aux | grep -i "$1"
+        fi
+    else
+        echo "You need to pass an argument"
+    fi
+}
+
+######################################################################
+# ll
+
+alias ll="ls -lh"
+alias sl="ls -lh"
+alias la="ls -lah"
+alias l="ls -lh"
+
+######################################################################
+# Copy file or dir path to pasteboard
+
+function pwc() {
+    echo "pwc is deactivted until you figure out how to deal with '~' in the path"
+#     if [ -z "$1" ]
+#     then
+#         pwd | tr -d '\n' | pbcopy
+#     else
+#         initial_string="$(pwd | tr -d '\n')/$1"
+#         echo $initial_string | tr -d '\n' | pbcopy
+#     fi
+}
+
+######################################################################
+#Options 
+######################################################################
+
+# Setup so you don't have to type `cd` to get into a directory 
+setopt AUTO_CD
+setopt CDABLE_VARS
+
+# Set colors for ls
+export CLICOLOR=1
+export LS_COLORS='di=1:fi=34:ln=31:pi=5:so=5:bd=5:cd=5:or=31'
+
+# Don't keep any commands that start with a space to the history log
+setopt HIST_IGNORE_SPACE
+
+
+
+######################################################################
+# Prmopt stuff
+
+
+NEWLINE=$'\n'
+
+COLOR_PROMPT='%F{15}'
+# COLOR_BORDER='%F{248}'
+# COLOR_BORDER='%F{88}'
+# COLOR_BORDER='%F{81}'
+COLOR_BORDER='%F{15}'
+# COLOR_PRIMARY='%F{253}'
+COLOR_PRIMARY='%F{15}'
+COLOR_SECONDARY='%F{241}'
+# COLOR_SECONDARY='%F{15}'
+COLOR_TERTIARY='%F{241}'
+# COLOR_SEPERATOR='%F{239}'
+COLOR_SEPERATOR='%F{241}'
+# COLOR_SEPERATOR='%F{15}'
+COLOR_VENV='%F{136}'
+COLOR_ERROR='%F{160}'
+OFFSET_BORDER="${#COLOR_BORDER}"
+OFFSET_PRIMARY="${#COLOR_PRIMARY}"
+OFFSET_SECONDARY="${#COLOR_SECONDARY}"
+OFFSET_SEPERATOR="${#COLOR_SEPERATOR}"
+OFFSET_TERTIARY="${#COLOR_TERTIARY}"
+OFFSET_VENV="${#COLOR_VENV}"
+OFFSET_ERROR="${#COLOR_ERROR}"
+
+### 
+
+# function preexec() {
+#     timer=$(($(print -P %D{%s%6.})/1000))
+# }
+
+function prompt_git_branch() {
+    BRANCH_NAME=$(git branch --show-current 2> /dev/null)
+    if [ $? -eq 0 ]; then
+        echo -n " ${COLOR_SEPERATOR}· ${COLOR_SECONDARY}[$BRANCH_NAME]"
+        return $(( $OFFSET_SEPERATOR + $OFFSET_SECONDARY ))
+    else
+        return 0
+    fi 
+}
+
+function prompt_git_status() {
+    NUMBER_OF_CHANGES=$(git status --short 2> /dev/null | wc -l | tr -d " ")
+    if [ $NUMBER_OF_CHANGES -ne "0" ]; then 
+        echo -n "["
+        ### Get Insertions and/or Deletions
+        NUMBER_A=$(git diff --shortstat 2> /dev/null | cut -d' ' -f5)
+        NUMBER_B=$(git diff --shortstat 2> /dev/null | cut -d' ' -f7)
+        if [ -z "$NUMBER_B" ]; then
+            echo -n $NUMBER_A  
+        else
+            echo -n $(($NUMBER_A + $NUMBER_B))
+        fi
+        echo -n "]"
+        return 0
+    else 
+        return 0
+    fi
+}
+
+function show_timer() {
+  if [ $timer ]; then
+    now=$(($(print -P %D{%s%6.})/1000))
+    elapsed=$(($now-$timer))
+    elapsed_2=$((elapsed/1000))
+    seconds_with_decimals=$(echo $elapsed|awk '{printf "%.2f",$0/1000}')
+    echo "${COLOR_SECONDARY}${seconds_with_decimals}sec "
+    unset timer
+    return $OFFSET_SECONDARY
+  else
+    return 0
+  fi
+}
+
+function prompt_python_venv() {
+    if [ -n "$VIRTUAL_ENV" ]; then 
+        echo -n " ${COLOR_SEPERATOR}· ${COLOR_VENV}VENV"
+        return $(( $OFFSET_SEPERATOR + $OFFSET_VENV ))
+    else
+        return 0
+    fi
+}
+
+function prompt_short_directory() {
+    # TODO: Get this to work without deleting/hardcoding the `~` from dirs
+    # SHORT_PROMPT=$(dirs | awk -F/ '{ for (i=2;i<NF;i++) { prompt=sprintf ("%s/%.1s", prompt, $i) } prompt=sprintf("%s/%s", prompt, $NF) } END { print prompt }')
+    SHORT_PROMPT=$(pwd | awk -F/ '{ for (i=2;i<NF;i++) { prompt=sprintf ("%s/%.1s", prompt, $i) } prompt=sprintf("%s/%s", prompt, $NF) } END { print prompt }' | sed 's/\/U\/a/~/')
+    echo -n "${COLOR_PRIMARY}$SHORT_PROMPT"
+    return ${OFFSET_PRIMARY}
+}
+
+function prompt_directory() {
+    echo -n "${COLOR_SECONDARY}blade:$(dirs)"
+    return ${OFFSET_PRIMARY}
+}
+
+function prompt_clock() {
+    AM_PM=$(date +%p) 
+    if [[ $AM_PM == "PM" ]]; then
+        echo -n " ${COLOR_SEPERATOR}· ${COLOR_SECONDARY}"
+        date +%-I:%Mp
+    else 
+        echo -n " ${COLOR_SEPERATOR}· ${COLOR_SECONDARY}"
+        date +%-I:%Ma
+    fi 
+    return $(( $OFFSET_SEPERATOR + $OFFSET_SECONDARY ))
+}
+
+function prompt_previous_exit_code() {
+    if [[ $1 -eq 0 ]]; then
+        echo " ${COLOR_SEPERATOR}· ${COLOR_SECONDARY}OK"
+        return $(( $OFFSET_SEPERATOR + $OFFSET_SECONDARY ))
+    else
+        echo " ${COLOR_SEPERATOR}· ${COLOR_ERROR}ERROR: $1"
+        return $(( $OFFSET_SEPERATOR + $OFFSET_ERROR ))
+    fi 
+}
+
+function prompt_weather() {
+    # Temporarily short circuit after move to blade
+    return ""
+    # TODO: setup to make sure the file exists before trying to use it
+    WEATHER_STRING=$(cat "/Users/alan/workshop/command_prompt_weather/command_prompt_weather.txt")
+    echo -n " ${COLOR_SEPERATOR}· ${COLOR_SECONDARY}$WEATHER_STRING"
+    return $(( $OFFSET_SEPERATOR + $OFFSET_SECONDARY + 1 ))
+}
+
+function precmd() {
+    P="%F{34}$(dirs)$(prompt_git_branch)$(prompt_git_status)"
+    P="${P}${NEWLINE}"
+    PS1="${P}%f%b$ "
+
+}
+function precmd_old() {
+ 
+    PREVIOUS_EXIT_CODE=$?
+
+    P_WIDTH=$(tput cols)
+
+    TOP_LINE="${COLOR_BORDER}╭$(printf '─%.0s' {3..$(tput cols)})╮"
+    BOTTOM_LINE="${COLOR_BORDER}╰$(printf '─%.0s' {3..$(tput cols)})╯"
+
+    D_WEATHER=$(prompt_weather)
+    O_WEATHER=$?
+    C_WEATHER=$(( ${#D_WEATHER} - $O_WEATHER ))
+
+    D_DIRECTORY=$(prompt_directory)
+    O_DIRECTORY=$?
+    C_DIRECTORY=$(( ${#D_DIRECTORY} - $O_DIRECTORY ))
+
+    D_SHORT_DIRECTORY=$(prompt_short_directory)
+    O_SHORT_DIRECTORY=$?
+    C_SHORT_DIRECTORY=$(( ${#D_SHORT_DIRECTORY} - $O_SHORT_DIRECTORY ))
+
+    D_CLOCK=$(prompt_clock)
+    O_CLOCK=$?
+    C_CLOCK=$(( ${#D_CLOCK} - $O_CLOCK ))
+
+    D_PREVIOUS_EXIT_STATUS=$(prompt_previous_exit_code $PREVIOUS_EXIT_CODE)
+    O_PREVIOUS_EXIT_STATUS=$?
+    C_PREVIOUS_EXIT_STATUS=$(( ${#D_PREVIOUS_EXIT_STATUS} - $O_PREVIOUS_EXIT_STATUS ))
+
+    D_GIT_BRANCH=$(prompt_git_branch)
+    O_GIT_BRANCH=$?
+    C_GIT_BRANCH=$(( ${#D_GIT_BRANCH} - $O_GIT_BRANCH ))
+
+    D_GIT_STATUS=$(prompt_git_status)
+    O_GIT_STATUS=$?
+    C_GIT_STATUS=$(( ${#D_GIT_STATUS} - $O_GIT_STATUS ))
+
+    D_VENV=$(prompt_python_venv)
+    O_VENV=$?
+    C_VENV=$(( ${#D_VENV} - $O_VENV ))
+
+    D_TIMER=$(show_timer)
+    O_TIMER=$?
+    C_TIMER=$(( ${#D_TIMER} - $O_TIMER ))
+
+    # This is for padding some white space between things...
+    D_PADDING=4
+
+    #if [[ $P_WIDTH -ge $(( $D_PADDING + $C_HUMIDITY + $C_DIRECTORY + $C_CLOCK + $C_PREVIOUS_EXIT_STATUS + $C_GIT_BRANCH + $C_GIT_STATUS + $C_VENV + $C_TIMER )) ]]; then  
+    if [[ $P_WIDTH -ge $(( $D_PADDING + $C_DIRECTORY + $C_CLOCK + $C_PREVIOUS_EXIT_STATUS + $C_GIT_BRANCH + $C_GIT_STATUS + $C_VENV + $C_WEATHER + $C_TIMER )) ]]; then  
+        D="│ "
+        O=0
+        D="${D}${D_DIRECTORY}"
+        O="$(( $O + ${O_DIRECTORY} ))"
+        D="${D}${D_CLOCK}"
+        O="$(( $O + ${O_CLOCK} ))"
+        D="${D}${D_GIT_BRANCH}"
+        O="$(( $O + ${O_GIT_BRANCH} ))"
+        D="${D}${D_GIT_STATUS}"
+        O="$(( $O + ${O_GIT_STATUS} ))"
+        D="${D}${D_PREVIOUS_EXIT_STATUS}"
+        O="$(( $O + ${O_PREVIOUS_EXIT_STATUS} ))"
+        D="${D}${D_VENV}"
+        O="$(( $O + ${O_VENV} ))"
+        D="${D}${D_WEATHER}"
+        O="$(( $O + ${O_WEATHER} ))"
+        # D="${D}${D_HUMIDITY}"
+        # O="$(( $O + ${O_HUMIDITY} ))"
+        # Define the final colum here since you need to know the rest of the 
+        # prompt first
+        FINAL_COLUMN=$(( $(tput cols) - ${#D} + ${O} - ${#D_TIMER} + ${O_TIMER} ))
+        D="${D}$(printf ' %.0s' {2..${FINAL_COLUMN}})${COLOR_BORDER}"
+        D="${D}$(show_timer)"
+        D="${D}${COLOR_BORDER}│"
+
+    elif [[ $P_WIDTH -ge $(( $D_PADDING + $C_DIRECTORY + $C_PREVIOUS_EXIT_STATUS + $C_GIT_BRANCH + $C_GIT_STATUS + $C_VENV + $C_TIMER )) ]]; then  
+        D="│ "
+        O=0
+        D="${D}${D_DIRECTORY}"
+        O="$(( $O + ${O_DIRECTORY} ))"
+        D="${D}${D_GIT_BRANCH}"
+        O="$(( $O + ${O_GIT_BRANCH} ))"
+        D="${D}${D_GIT_STATUS}"
+        O="$(( $O + ${O_GIT_STATUS} ))"
+        D="${D}${D_PREVIOUS_EXIT_STATUS}"
+        O="$(( $O + ${O_PREVIOUS_EXIT_STATUS} ))"
+        D="${D}${D_VENV}"
+        O="$(( $O + ${O_VENV} ))"
+        # Define the final colum here since you need to know the rest of the 
+        # prompt first
+        FINAL_COLUMN=$(( $(tput cols) - ${#D} + ${O} - ${#D_TIMER} + ${O_TIMER} ))
+        D="${D}$(printf ' %.0s' {2..${FINAL_COLUMN}})${COLOR_BORDER}"
+        D="${D}$(show_timer)"
+        D="${D}${COLOR_BORDER}│"
+
+    elif [[ $P_WIDTH -ge $(( $D_PADDING + $C_DIRECTORY + $C_GIT_BRANCH + $C_GIT_STATUS + $C_VENV + $C_TIMER )) ]]; then  
+        D="│ "
+        O=0
+        D="${D}${D_DIRECTORY}"
+        O="$(( $O + ${O_DIRECTORY} ))"
+        D="${D}${D_GIT_BRANCH}"
+        O="$(( $O + ${O_GIT_BRANCH} ))"
+        D="${D}${D_GIT_STATUS}"
+        O="$(( $O + ${O_GIT_STATUS} ))"
+        D="${D}${D_VENV}"
+        O="$(( $O + ${O_VENV} ))"
+        # Define the final colum here since you need to know the rest of the 
+        # prompt first
+        FINAL_COLUMN=$(( $(tput cols) - ${#D} + ${O} - ${#D_TIMER} + ${O_TIMER} ))
+        D="${D}$(printf ' %.0s' {2..${FINAL_COLUMN}})${COLOR_BORDER}"
+        D="${D}$(show_timer)"
+        D="${D}${COLOR_BORDER}│"
+
+    elif [[ $P_WIDTH -ge $(( $D_PADDING + $C_DIRECTORY + $C_GIT_BRANCH + $C_GIT_STATUS + $C_VENV )) ]]; then  
+        D="│ "
+        O=0
+        D="${D}${D_DIRECTORY}"
+        O="$(( $O + ${O_DIRECTORY} ))"
+        D="${D}${D_GIT_BRANCH}"
+        O="$(( $O + ${O_GIT_BRANCH} ))"
+        D="${D}${D_GIT_STATUS}"
+        O="$(( $O + ${O_GIT_STATUS} ))"
+        D="${D}${D_VENV}"
+        O="$(( $O + ${O_VENV} ))"
+        # Define the final colum here since you need to know the rest of the 
+        # prompt first
+        FINAL_COLUMN=$(( $(tput cols) - ${#D} + ${O} ))
+        D="${D}$(printf ' %.0s' {2..${FINAL_COLUMN}})${COLOR_BORDER}"
+        D="${D}${COLOR_BORDER}│"
+
+    elif [[ $P_WIDTH -ge $(( $D_PADDING + $C_SHORT_DIRECTORY + $C_GIT_BRANCH + $C_GIT_STATUS + $C_VENV )) ]]; then  
+        D="│ "
+        O=0
+        D="${D}${D_SHORT_DIRECTORY}"
+        O="$(( $O + ${O_SHORT_DIRECTORY} ))"
+        D="${D}${D_GIT_BRANCH}"
+        O="$(( $O + ${O_GIT_BRANCH} ))"
+        D="${D}${D_GIT_STATUS}"
+        O="$(( $O + ${O_GIT_STATUS} ))"
+        D="${D}${D_VENV}"
+        O="$(( $O + ${O_VENV} ))"
+        # Define the final colum here since you need to know the rest of the 
+        # prompt first
+        FINAL_COLUMN=$(( $(tput cols) - ${#D} + ${O} ))
+        D="${D}$(printf ' %.0s' {2..${FINAL_COLUMN}})${COLOR_BORDER}"
+        D="${D}${COLOR_BORDER}│"
+    else
+        D="│ "
+        O=0
+        D="${D}${D_SHORT_DIRECTORY}"
+        O="$(( $O + ${O_SHORT_DIRECTORY} ))"
+        D="${D}${D_VENV}"
+        O="$(( $O + ${O_VENV} ))"
+        FINAL_COLUMN=$(( $(tput cols) - ${#D} + ${O} ))
+        D="${D}$(printf ' %.0s' {2..${FINAL_COLUMN}})${COLOR_BORDER}"
+        D="${D}${COLOR_BORDER}│"
+    fi
+
+
+    D="here"
+    P=""
+    #P="${P}${TOP_LINE}"
+    # P="${P}${NEWLINE}"
+    P="${P}${D_DIRECTORY}"
+    # P="${P}${NEWLINE}"
+    # P="${P}${BOTTOM_LINE}"
+    P="${P}${NEWLINE}"
+    PS1="${P}%f%b$ "
+
+}
+
+
+
+# Setup to use vim bindings
+# bindkey -v
+
+# Setup so up/down arrows go based of existing text
+bindkey '^[[A' up-line-or-search
+bindkey '^[[B' down-line-or-search
+
+# Nice output for git log
+function gl() {
+	# Grab the initial output from git log and reverse it.
+	INITIAL_OUTPUT=$(git log --decorate --oneline --abbrev-commit --graph --all --color=always | sed '1!G;h;$!d') 
+	# Loop through it line by line
+	while read -r THE_LINE
+	do
+		# Just output it if it's a commit (identifed by a "*")
+		if [[ "$THE_LINE" =~ '\*' ]]; then
+			echo "$THE_LINE"
+		# Otherwise, flip the "/" and "\" characters
+		else
+			# Figure out which way to flip
+			if [[ "$THE_LINE" =~ '/' ]]; then
+				echo "$THE_LINE" | sed 's/\//\\/g;'
+			else
+				echo "$THE_LINE" | sed 's/\\/\//g;'
+			fi
+		fi
+	done <<< $INITIAL_OUTPUT
+}
+
+
+# export NVM_DIR="$HOME/.nvm"
+# [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+ 
+export PATH="/Users/alan/go/bin:$PATH"
+
+
+
