@@ -33,7 +33,7 @@ if __name__ == "__main__":
     am.move_app_to_space('Adobe Photoshop 2022', 5)
 
     am.move_app_to_space('Soulver 3', 6)
-    am.move_app_to_space('Lightroom Classic', 7)
+    # am.move_app_to_space('Lightroom Classic', 7)
 
     # Screen 2 - Desktops 9-16
     am.move_app_to_space('Safari', 9)

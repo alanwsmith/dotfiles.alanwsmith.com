@@ -20,12 +20,12 @@ if __name__ == "__main__":
 
     am.move_app_to_space('Discord', 10)
     am.move_app_to_space('1Password 7', 11)
-    am.insert_from_anchor('1Password 7', 'west', 'Keychain Access')
+    am.insert_from_anchor('1Password 7', 'south', 'Keychain Access')
 
 
     # Screen 1 - Desktops 2-8
 
-    am.move_app_to_space('Adobe Photoshop 2022', 2)
+    # am.move_app_to_space('Adobe Photoshop 2022', 2)
     # am.move_app_to_space('Lightroom Classic', 3)
 
 
@@ -44,8 +44,8 @@ if __name__ == "__main__":
     am.insert_from_anchor('Code', 'north', 'Sublime Text')
     am.expand_bottom('Sublime Text', 350)
 
-    am.insert_from_anchor('Sublime Text', 'north', 'Safari')
-    am.expand_bottom('Safari', 300)
+    am.insert_from_anchor('Sublime Text', 'north', 'DB Browser for SQLite')
+    am.expand_bottom('DB Browser for SQLite', 300)
 
     am.insert_from_anchor('iTerm2', 'north', 'GitHub Desktop')
     am.expand_top('iTerm2', 200)
