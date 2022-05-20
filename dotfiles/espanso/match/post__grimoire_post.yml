@@ -1,12 +1,9 @@
-name: post__grimoire_post 
-parent: default
-
 matches:
-  - trigger: ";post"
+  - trigger: post;
     replace: "{{output}}"
     vars:
       - name: output
-        type: script 
+        type: script
         params:
           args:
             - bash

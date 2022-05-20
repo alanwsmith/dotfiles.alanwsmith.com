@@ -26,7 +26,7 @@ if __name__ == "__main__":
     am.move_app_to_space('1Password 7', 2)
     am.insert_from_anchor('1Password 7', 'south', 'Keychain Access')
 
-    am.move_app_to_space('Discord', 3)
+    am.move_app_to_space('Discord', 4)
 
     am.focus_app('Safari')
     am.focus_app('iTerm2')

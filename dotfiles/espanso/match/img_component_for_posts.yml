@@ -1,0 +1,11 @@
+matches:
+  - trigger: img;
+    replace: '{{output}}'
+    vars:
+      - name: output
+        type: script
+        params:
+          args:
+            - bash
+            - '%CONFIG%/scripts/img_component_for_posts.bash'
+          trim: false
