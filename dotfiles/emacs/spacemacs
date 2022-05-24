@@ -627,62 +627,10 @@ before packages are loaded."
   (load-file
    "/Users/alan/workshop/grimoire-mode/src/grimoire-mode.el")
 
+  ;; Load the function for saving and running a python script
   (load-file
    "/Users/alan/workshop/dotfiles.alanwsmith.com/dotfiles/emacs/functions/aws-save-and-run-python.el"
    )
-
-
-  ;; ;; This is an attempt to add a hotkey for the function
-  ;; ;; to save and run a python file
-  ;; (add-hook 'python-mode-hook
-  ;;           (lambda () (
-  ;;                define-key python-mode-map (kbd "s-r") 'aws-save-and-run-python
-  ;;             )
-  ;;           )
-  ;;           )
-
-
-  ;; This was an attempt to setup F6 to run a python file that didn't work
-  ;; Leaving for reference for now. 
-  ;; (add-hook 'Python-mode-hook
-             ;;(lambda () (local-set-key (kbd "s-r") 'aws-save-and-run-python)))
- 
-  ;; (eval-after-load 'python-mode
-  ;;   '(define-key python-mode-map [(tab)] 'aws-save-and-run-python))
-
-  ;; (eval-after-load 'python-mode
-  ;;   '(define-key python-mode-map [(kbd "s-r")] 'aws-save-and-run-python))
-  ;; (eval-after-load 'python
-  ;;   '(define-key python-mode-map [(kbd "s-r")] 'aws-save-and-run-python))
-  ;; (eval-after-load 'python-mode
-  ;;   '(define-key python-mode-map (kbd "s-r") 'aws-save-and-run-python))
-  ;; (eval-after-load 'python
-  ;;   '(define-key python-mode-map (kbd "s-r") 'aws-save-and-run-python))
-  ;; (eval-after-load 'Python-mode
-  ;;   '(define-key python-mode-map (kbd "s-r") 'aws-save-and-run-python))
-  ;; (eval-after-load 'Python
-  ;;   '(define-key python-mode-map (kbd "s-r") 'aws-save-and-run-python))
-  ;; (eval-after-load 'anaconda-mode
-  ;;   '(define-key python-mode-map (kbd "s-r") 'aws-save-and-run-python))
-  ;; (eval-after-load 'anaconda
-  ;;   '(define-key python-mode-map (kbd "s-r") 'aws-save-and-run-python))
-  ;; (eval-after-load 'anaconda-mode
-  ;;   '(define-key python-mode-map (kbd "s-r") 'aws-save-and-run-python))
-  ;; (eval-after-load 'anaconda
-  ;;   '(define-key python-mode-map (kbd "s-r") 'aws-save-and-run-python))
-
-
-    ;; (define-key python-mode-map (kbd "s-r") 'aws-save-and-run-python)
-
-  ;; This sets up to use command-r to save and run python
-  ;; but it does it globally. Working to see if it can be
-  ;; setup so that it just applies in Python mod
-  ;; (global-set-key (kbd "s-r") 'aws-save-and-run-python)
-
-  ;; (eval-after-load 'python
-  ;;   '(define-key python-mode-map (kbd "s-r") 'aws-save-and-run-python)
-  ;;   )
-
 
 
   ;; Allow for direct evaluation via 'M-colon' for 'eval-expression'
@@ -695,25 +643,12 @@ before packages are loaded."
   ;; (setq display-line-numbers 'relative)
   ;;   (global-display-line-numbers-mode 1)
 
-
-  ;(compleseus :variables
-  ;            compleseus-engine 'selectrum)
-
-  ;(selectrum-mode +1)
-
-  ;; (setq helm-grep-ag-command (concat "rg"
-  ;;                                    " --color=never"
-
-  ;;                                    " --smart-case"
-  ;;                                    " --no-heading"
-  ;;                                    " --line-number %s %s %s")
-  ;;       helm-grep-file-path-style 'relative)
-
-
 )
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Setup Command-r to launch the function that saves and runs
-;; a python script 
+;; a python script
+
 (add-hook 'python-mode-hook
           (lambda () (local-set-key (kbd "s-r") 'aws-save-and-run-python))
           )
