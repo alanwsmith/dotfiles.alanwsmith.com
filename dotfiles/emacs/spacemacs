@@ -614,6 +614,7 @@ Put your configuration code here, except for variables that should be set
 before packages are loaded."
   (setq org-confirm-babel-evaluate nil)
   (require 'org-tempo)
+  (require 'json)
   (add-to-list 'org-structure-template-alist
                '("j" . "src js :results output"))
   (add-to-list 'org-structure-template-alist
