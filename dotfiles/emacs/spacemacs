@@ -632,18 +632,14 @@ before packages are loaded."
    "/Users/alan/workshop/dotfiles.alanwsmith.com/dotfiles/emacs/functions/aws-save-and-run-python.el"
    )
 
-
   ;; Allow for direct evaluation via 'M-colon' for 'eval-expression'
   ;; (That is, don't ask to confirm if you use 'eval-expression'
   ;; to run a command)
   (put 'eval-expression 'disabled nil)
 
-  ;; ;; This was an attempt to turn on line numbers, but
-  ;; ;; it's not working
-  ;; (setq display-line-numbers 'relative)
-  ;;   (global-display-line-numbers-mode 1)
 
 )
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Setup Command-r to launch the function that saves and runs
