@@ -45,6 +45,7 @@ This function should only modify configuration layer settings."
      helm
      python
      javascript
+     shell-scripts
      ;; lsp
      ;; markdown
      multiple-cursors
