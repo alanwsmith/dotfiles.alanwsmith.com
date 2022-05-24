@@ -649,6 +649,12 @@ before packages are loaded."
           (lambda () (local-set-key (kbd "s-r") 'aws-save-and-run-python))
           )
 
+    ;; Setup to use line number in org mode
+  (add-hook 'org-mode-hook 
+  (lambda () 
+    (display-line-numbers-mode +1)
+    (setq display-line-numbers 'relative)
+    ))
 
 
 ;; Do not write anything past this comment. This is where Emacs will
