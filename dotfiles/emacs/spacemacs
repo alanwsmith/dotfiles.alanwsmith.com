@@ -57,6 +57,10 @@ This function should only modify configuration layer settings."
      ;; syntax-checking
      ;; version-control
      ;; osx
+     ;; compleseus
+     ;; deft
+     ;; treemacs
+ )
 
 
    ;; List of additional packages that will be installed without being wrapped
