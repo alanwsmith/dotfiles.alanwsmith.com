@@ -5,6 +5,7 @@ is: https://github.com/syl20bnr/spacemacs/blob/b3e67aafe2451ca91e2d310d29879616e
 
   (interactive "P")
   (save-buffer)
+  (setq python-shell-interpreter "/opt/homebrew/bin/python3")
   (let ((universal-argument t)
         (compile-command
          (format
