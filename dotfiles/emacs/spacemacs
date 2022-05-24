@@ -615,6 +615,9 @@ before packages are loaded."
   (setq org-confirm-babel-evaluate nil)
   (require 'org-tempo)
   (require 'json)
+
+  ;; These setup templates for`<jTAB` and `<pTAB`
+  ;; source code block expansions
   (add-to-list 'org-structure-template-alist
                '("j" . "src js :results output"))
   (add-to-list 'org-structure-template-alist
