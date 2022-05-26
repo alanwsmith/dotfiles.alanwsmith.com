@@ -583,6 +583,11 @@ before packages are loaded."
               (setq display-line-numbers 'relative)
               ))
 
+
+  ;; Load the grimoire 
+  (load-file
+   "/Users/alan/workshop/grimoire-mode/src/grimoire-mode.el")
+
 )
 
 
