@@ -18,4 +18,3 @@ is: https://github.com/syl20bnr/spacemacs/blob/b3e67aafe2451ca91e2d310d29879616e
       (compile compile-command t)
       (with-current-buffer (get-buffer "*compilation*")
         (inferior-python-mode)))))
-)
