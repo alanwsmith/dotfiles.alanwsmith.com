@@ -558,6 +558,10 @@ before packages are loaded."
   ;; Set to use python3 in Org Mode Babel code blocks
   (setq org-babel-python-command "/opt/homebrew/bin/python3")
 
+  ;; Skip requiring confirmation everytime you run a souce
+  ;; code block with 'C-c C-c'
+  (setq org-confirm-babel-evaluate nil)
+
 )
 
 
