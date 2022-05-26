@@ -554,6 +554,10 @@ This function is called at the very end of Spacemacs startup, after layer
 configuration.
 Put your configuration code here, except for variables that should be set
 before packages are loaded."
+
+  ;; Set to use python3 in Org Mode Babel code blocks
+  (setq org-babel-python-command "/opt/homebrew/bin/python3")
+
 )
 
 
