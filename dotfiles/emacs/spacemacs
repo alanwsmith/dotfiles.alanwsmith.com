@@ -562,6 +562,27 @@ before packages are loaded."
   ;; code block with 'C-c C-c'
   (setq org-confirm-babel-evaluate nil)
 
+  ;; Use relative line numbers in org mode
+  (add-hook 'org-mode-hook
+            (lambda ()
+              (display-line-numbers-mode +1)
+              (setq display-line-numbers 'relative)
+              ))
+
+  ;; Use relative line numbers in emacs lisp mode
+  (add-hook 'emacs-lisp-mode-hook
+            (lambda ()
+              (display-line-numbers-mode +1)
+              (setq display-line-numbers 'relative)
+              ))
+
+  ;; Use relative line numbers in python mode
+  (add-hook 'python-mode-hook
+            (lambda ()
+              (display-line-numbers-mode +1)
+              (setq display-line-numbers 'relative)
+              ))
+
 )
 
 
