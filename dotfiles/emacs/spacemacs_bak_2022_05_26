@@ -32,7 +32,8 @@ This function should only modify configuration layer settings."
 
    ;; List of configuration layers to load.
    dotspacemacs-configuration-layers
-   '(python
+   '(
+     html
      ;; ----------------------------------------------------------------
      ;; Example of useful layers you may want to use right away.
      ;; Uncomment some layer names and press `SPC f e R' (Vim style) or
@@ -43,17 +44,24 @@ This function should only modify configuration layer settings."
      emacs-lisp
      ;; git
      helm
+     python
+     javascript
+     shell-scripts
      ;; lsp
      ;; markdown
      multiple-cursors
      org
      ;; (shell :variables
-     ;;        shell-default-height 30
-     ;;        shell-default-position 'bottom)
+      ;;       shell-default-height 30
+       ;;      shell-default-position 'bottom)
      ;; spell-checking
      ;; syntax-checking
      ;; version-control
-     treemacs)
+     ;; osx
+     ;; compleseus
+     ;; deft
+     ;; treemacs
+ )
 
 
    ;; List of additional packages that will be installed without being wrapped
@@ -230,8 +238,58 @@ It should only modify the values of Spacemacs settings."
    ;; List of themes, the first of the list is loaded when spacemacs starts.
    ;; Press `SPC T n' to cycle to the next theme in the list (works great
    ;; with 2 themes variants, one dark and one light)
-   dotspacemacs-themes '(spacemacs-dark
-                         spacemacs-light)
+   dotspacemacs-themes '(
+                         tango-2
+                         lush
+afternoon
+alect-black
+ample
+ample-flat
+ample-zen
+badwolf
+brin
+bubbleberry
+busybee
+cherry-blossom
+clues
+dakrone
+darktooth
+deeper-blue
+default
+django
+dorsey
+flatland
+fogus
+granger
+hc-zenburn
+hemisu-dark
+heroku
+hickey
+ir-black
+jbeans
+manoj-dark
+misterioso
+mustang
+naquadah
+obsidian
+odersky
+phoenix-dark-mono
+planet
+purple-haze
+sanityinc-solarized-dark
+seti
+soft-charcoal
+soothe
+spacegray
+spolsky
+subatomic
+tao-yin
+tsdh-dark
+twilight
+ujelly
+underwater
+wilson
+                         )
 
    ;; Set the theme for the Spaceline. Supported themes are `spacemacs',
    ;; `all-the-icons', `custom', `doom', `vim-powerline' and `vanilla'. The
@@ -249,8 +307,8 @@ It should only modify the values of Spacemacs settings."
    ;; Default font or prioritized list of fonts. The `:size' can be specified as
    ;; a non-negative integer (pixel size), or a floating-point (point size).
    ;; Point size is recommended, because it's device independent. (default 10.0)
-   dotspacemacs-default-font '("Source Code Pro"
-                               :size 10.0
+   dotspacemacs-default-font '("Anonymice Nerd Font Mono"
+                               :size 24.0
                                :weight normal
                                :width normal)
 
@@ -408,7 +466,7 @@ It should only modify the values of Spacemacs settings."
    ;;   :size-limit-kb 1000)
    ;; When used in a plist, `visual' takes precedence over `relative'.
    ;; (default nil)
-   dotspacemacs-line-numbers nil
+   dotspacemacs-line-numbers 'relative 
 
    ;; Code folding method. Possible values are `evil', `origami' and `vimish'.
    ;; (default 'evil)
@@ -548,33 +606,74 @@ dump."
 )
 
 
+
 (defun dotspacemacs/user-config ()
   "Configuration for user code:
 This function is called at the very end of Spacemacs startup, after layer
 configuration.
 Put your configuration code here, except for variables that should be set
 before packages are loaded."
+  (setq org-confirm-babel-evaluate nil)
+  (require 'org-tempo)
+  (require 'json)
+
+  ;; These setup templates for`<jTAB` and `<pTAB`
+  ;; source code block expansions
+  (add-to-list 'org-structure-template-alist
+               '("j" . "src js :results output"))
+  (add-to-list 'org-structure-template-alist
+               '("p" . "src python :results output"))
+
+  ;; Setup to work on the grimoire
+  (load-file
+   "/Users/alan/workshop/grimoire-mode/src/grimoire-mode.el")
+
+  ;; Load the function for saving and running a python script
+  (load-file
+   "/Users/alan/workshop/dotfiles.alanwsmith.com/dotfiles/emacs/functions/aws-save-and-run-python.el"
+   )
+
+  ;; Allow for direct evaluation via 'M-colon' for 'eval-expression'
+  ;; (That is, don't ask to confirm if you use 'eval-expression'
+  ;; to run a command)
+  (put 'eval-expression 'disabled nil)
+
+
 )
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Setup Command-r to launch the function that saves and runs
+;; a python script
+
+(add-hook 'python-mode-hook
+          (lambda () (local-set-key (kbd "s-r") 'aws-save-and-run-python))
+          )
+
+  (add-hook 'python-mode-hook 
+  (lambda () 
+    (display-line-numbers-mode +1)
+    (setq display-line-numbers 'relative)
+    ))
+
+  ;; Set to use python3 in Org Mode Babel code blocks
+  (setq org-babel-python-command "/opt/homebrew/bin/python3")
+
+    ;; Setup to use line number in org mode
+  (add-hook 'org-mode-hook 
+  (lambda () 
+    (display-line-numbers-mode +1)
+    (setq display-line-numbers 'relative)
+    ))
+
+
+;; Setup to use line number in org mode
+(add-hook 'emacs-lisp-mode-hook 
+          (lambda () 
+            (display-line-numbers-mode +1)
+            (setq display-line-numbers 'relative)
+            ))
 
 
 ;; Do not write anything past this comment. This is where Emacs will
 ;; auto-generate custom variable definitions.
-(defun dotspacemacs/emacs-custom-settings ()
-  "Emacs custom settings.
-This is an auto-generated function, do not modify its content directly, use
-Emacs customize menu instead.
-This function is called at the very end of Spacemacs initialization."
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(package-selected-packages
-   '(yapfify stickyfunc-enhance sphinx-doc pytest pyenv-mode pydoc py-isort poetry transient pippel pipenv load-env-vars pyvenv pip-requirements nose lsp-python-ms lsp-pyright live-py-mode importmagic epc ctable concurrent deferred helm-pydoc helm-gtags helm-cscope xcscope ggtags dap-mode lsp-treemacs bui lsp-mode markdown-mode cython-mode counsel-gtags counsel swiper ivy company-anaconda company code-cells blacken anaconda-mode pythonic ws-butler writeroom-mode winum which-key volatile-highlights vi-tilde-fringe uuidgen use-package undo-tree treemacs-projectile treemacs-persp treemacs-icons-dired treemacs-evil toc-org symon symbol-overlay string-inflection string-edit spaceline-all-the-icons restart-emacs request rainbow-delimiters quickrun popwin pcre2el password-generator paradox overseer org-superstar org-rich-yank org-projectile org-present org-pomodoro org-mime org-download org-contrib org-cliplink open-junk-file nameless multi-line macrostep lorem-ipsum link-hint inspector info+ indent-guide hybrid-mode hungry-delete htmlize hl-todo highlight-parentheses highlight-numbers highlight-indentation hide-comnt helm-xref helm-themes helm-swoop helm-purpose helm-projectile helm-org-rifle helm-org helm-mode-manager helm-make helm-flx helm-descbinds helm-ag google-translate golden-ratio gnuplot font-lock+ flycheck-package flycheck-elsa flx-ido fancy-battery eyebrowse expand-region evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-textobj-line evil-terminal-cursor-changer evil-surround evil-org evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-lisp-state evil-lion evil-indent-plus evil-iedit-state evil-goggles evil-exchange evil-escape evil-ediff evil-easymotion evil-collection evil-cleverparens evil-args evil-anzu eval-sexp-fu emr elisp-slime-nav elisp-def editorconfig dumb-jump drag-stuff dotenv-mode dired-quick-sort diminish devdocs define-word column-enforce-mode clean-aindent-mode centered-cursor-mode auto-highlight-symbol auto-compile aggressive-indent ace-link ace-jump-helm-line)))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(highlight-parentheses-highlight ((nil (:weight ultra-bold))) t))
-)
