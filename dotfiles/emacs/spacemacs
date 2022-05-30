@@ -559,8 +559,9 @@ configuration.
 Put your configuration code here, except for variables that should be set
 before packages are loaded."
 
-  ;; Set to use python3 in Org Mode Babel code blocks
+  ;; Set interpreters in Org Mode Babel code blocks
   (setq org-babel-python-command "/opt/homebrew/bin/python3")
+  (setq org-babel-ruby-command "/Users/alan/.rubies/ruby-3.1.2/bin/ruby")
 
   ;; Skip requiring confirmation everytime you run a souce
   ;; code block with 'C-c C-c'
