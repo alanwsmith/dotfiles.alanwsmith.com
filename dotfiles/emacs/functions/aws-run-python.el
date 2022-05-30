@@ -1,4 +1,4 @@
-(defun aws-save-and-run-python (arg)
+(defun aws-run-python (arg)
   "Copy of spacemacs/python-execute-file that saves
 the file before compiling and executing. Original source
 is: https://github.com/syl20bnr/spacemacs/blob/b3e67aafe2451ca91e2d310d29879616e10981d0/layers/%2Blang/python/funcs.el#L519"
