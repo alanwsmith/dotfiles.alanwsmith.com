@@ -585,6 +585,13 @@ before packages are loaded."
               (setq display-line-numbers 'relative)
               ))
 
+  ;; Use relative line numbers in js2 mode
+  (add-hook 'js2-mode-hook
+            (lambda ()
+              (display-line-numbers-mode +1)
+              (setq display-line-numbers 'relative)
+              ))
+
 
   ;; These setup templates for `<jTAB' and `<pTAB'
   ;; source code block expansions in org-mode
