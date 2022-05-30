@@ -618,6 +618,12 @@ results in the grimoire"
   (load-file
    "/Users/alan/workshop/grimoire-mode/src/grimoire-mode.el")
 
+  ;; Load the script that runs file and outputs to tmp files
+  ;; that get picked up by an external editor
+  (load-file
+   "/Users/alan/workshop/dotfiles.alanwsmith.com/dotfiles/emacs/functions/save-and-run-file.el"
+   )
+
   ;; Set the grimiore hotkey 
   (global-set-key [f7] 'grimoire-mode-search-v0.10)
 
