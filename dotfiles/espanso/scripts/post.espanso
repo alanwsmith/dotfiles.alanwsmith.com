@@ -3,7 +3,7 @@
 TIMESTAMP=$(date +%Y-%m-%dT%H:%M:%S)
 
 echo "#+TITLE: "
-echo "#+DATE: '$TIMESTAMP'"
+echo "#+DATE: $TIMESTAMP"
 echo "#+ID: `/Users/alan/go/bin/ksuid | cut -c1-12 | tr '[:upper:]' '[:lower:]'`"
 echo "#+CATEGORY: Miscellaneous"
 echo "#+STATUS: scratch"
