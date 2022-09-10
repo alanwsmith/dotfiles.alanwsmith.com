@@ -1,0 +1,3 @@
+#!/bin/bash 
+
+echo -n ":tangle /Users/alan/workshop/dotfiles.alanwsmith.com/dotfiles/emacs/tangled-files/"

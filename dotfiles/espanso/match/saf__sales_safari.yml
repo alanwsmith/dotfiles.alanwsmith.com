@@ -1,0 +1,11 @@
+matches:
+  - trigger: saf;
+    replace: "{{output}}"
+    vars:
+      - name: output
+        type: script
+        params:
+          args:
+            - bash
+            - "%CONFIG%/scripts/safari.espanso"
+          trim: false

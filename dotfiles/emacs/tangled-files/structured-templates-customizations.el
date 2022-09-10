@@ -13,11 +13,10 @@
              '("p" .
                "src python :results output :wrap example :post padder(data=*this*)"))
 (add-to-list 'org-structure-template-alist
-             '("r" .
-               "src ruby :results output :wrap example :post padder(data=*this*)"))
-(add-to-list 'org-structure-template-alist
              '("s" .
                "src shell :results output :wrap example :post padder(data=*this*)"))
-
+(add-to-list 'org-structure-template-alist
+             '("r" .
+               "src rust :results output :wrap example :post padder(data=*this*) :main no"))
 
 (org-tempo-add-templates)
