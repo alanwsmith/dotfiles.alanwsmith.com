@@ -1,5 +1,8 @@
 function cdkinit () {
-  deactivate
+  if $(type deactivate &> /dev/null 2>&1) 
+  then
+    deactivate
+  fi
   cdk init app --language python && \
   rm -rf .venv && \
   python3 -m venv venv && \
