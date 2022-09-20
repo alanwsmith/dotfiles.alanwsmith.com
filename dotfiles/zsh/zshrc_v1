@@ -4,9 +4,9 @@
 export TERM=screen-256color
 
 if [ "$(tput cols)" -gt 65 ]; then
-    sort -R /Users/alan/workshop/dotfiles.alanwsmith.com/dotfiles/zsh/quotes | head -1 | sed 's/--/\n    --/' | sed 's/$/\n/' | fold -w 64 -s
+    sort -R "/Users/alan/workshop/dotfiles.alanwsmith.com/dotfiles/zsh/quotes.txt" | head -1 | sed 's/--/\n    --/' | sed 's/$/\n/' | fold -w 64 -s
 else
-    sort -R /Users/alan/workshop/dotfiles.alanwsmith.com/dotfiles/zsh/quotes | head -1 | sed 's/--/\n    --/'
+    sort -R "/Users/alan/workshop/dotfiles.alanwsmith.com/dotfiles/zsh/quotes.txt" | head -1 | sed 's/--/\n    --/'
 fi
 
 ######################################################################
@@ -236,13 +236,13 @@ function prompt_weather() {
     return $(( $OFFSET_SEPERATOR + $OFFSET_SECONDARY + 1 ))
 }
 
-function precmd() {
+function precmd_v2() {
     P="%F{34}$(dirs)$(prompt_git_branch)$(prompt_git_status)"
     P="${P}${NEWLINE}"
     PS1="${P}%f%b$ "
-
 }
-function precmd_old() {
+
+function precmd() {
  
     PREVIOUS_EXIT_CODE=$?
 
@@ -315,7 +315,7 @@ function precmd_old() {
         FINAL_COLUMN=$(( $(tput cols) - ${#D} + ${O} - ${#D_TIMER} + ${O_TIMER} ))
         D="${D}$(printf ' %.0s' {2..${FINAL_COLUMN}})${COLOR_BORDER}"
         D="${D}$(show_timer)"
-        D="${D}${COLOR_BORDER}│"
+        D="${D}${COLOR_BORDER} │"
 
     elif [[ $P_WIDTH -ge $(( $D_PADDING + $C_DIRECTORY + $C_PREVIOUS_EXIT_STATUS + $C_GIT_BRANCH + $C_GIT_STATUS + $C_VENV + $C_TIMER )) ]]; then  
         D="│ "
@@ -335,7 +335,7 @@ function precmd_old() {
         FINAL_COLUMN=$(( $(tput cols) - ${#D} + ${O} - ${#D_TIMER} + ${O_TIMER} ))
         D="${D}$(printf ' %.0s' {2..${FINAL_COLUMN}})${COLOR_BORDER}"
         D="${D}$(show_timer)"
-        D="${D}${COLOR_BORDER}│"
+        D="${D}${COLOR_BORDER} │"
 
     elif [[ $P_WIDTH -ge $(( $D_PADDING + $C_DIRECTORY + $C_GIT_BRANCH + $C_GIT_STATUS + $C_VENV + $C_TIMER )) ]]; then  
         D="│ "
@@ -353,7 +353,7 @@ function precmd_old() {
         FINAL_COLUMN=$(( $(tput cols) - ${#D} + ${O} - ${#D_TIMER} + ${O_TIMER} ))
         D="${D}$(printf ' %.0s' {2..${FINAL_COLUMN}})${COLOR_BORDER}"
         D="${D}$(show_timer)"
-        D="${D}${COLOR_BORDER}│"
+        D="${D}${COLOR_BORDER} │"
 
     elif [[ $P_WIDTH -ge $(( $D_PADDING + $C_DIRECTORY + $C_GIT_BRANCH + $C_GIT_STATUS + $C_VENV )) ]]; then  
         D="│ "
@@ -370,7 +370,7 @@ function precmd_old() {
         # prompt first
         FINAL_COLUMN=$(( $(tput cols) - ${#D} + ${O} ))
         D="${D}$(printf ' %.0s' {2..${FINAL_COLUMN}})${COLOR_BORDER}"
-        D="${D}${COLOR_BORDER}│"
+        D="${D}${COLOR_BORDER} │"
 
     elif [[ $P_WIDTH -ge $(( $D_PADDING + $C_SHORT_DIRECTORY + $C_GIT_BRANCH + $C_GIT_STATUS + $C_VENV )) ]]; then  
         D="│ "
@@ -401,13 +401,16 @@ function precmd_old() {
     fi
 
 
-    D="here"
+    # D="here"
+    # PS1="${D}"
+
     P=""
-    #P="${P}${TOP_LINE}"
-    # P="${P}${NEWLINE}"
-    P="${P}${D_DIRECTORY}"
-    # P="${P}${NEWLINE}"
-    # P="${P}${BOTTOM_LINE}"
+    P="${P}${TOP_LINE}"
+    P="${P}${NEWLINE}"
+    # P="${P}${D_DIRECTORY}"
+    P="${P}${D}"
+    P="${P}${NEWLINE}"
+    P="${P}${BOTTOM_LINE}"
     P="${P}${NEWLINE}"
     PS1="${P}%f%b$ "
 
