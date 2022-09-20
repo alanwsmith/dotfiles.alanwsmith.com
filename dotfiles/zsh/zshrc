@@ -186,21 +186,22 @@ function prompt_python_venv() {
 }
 
 function prompt_previous_exit_code() {
-    if [[ $1 -eq 0 ]]; then
+    if [[ $? -eq 0 ]]; then
         echo " ${COLOR_SEPERATOR}· ${COLOR_SECONDARY}OK"
         return $(( $OFFSET_SEPERATOR + $OFFSET_SECONDARY ))
     else
-        echo " ${COLOR_SEPERATOR}· ${COLOR_ERROR}ERROR: $1"
+        echo " ${COLOR_SEPERATOR}· ${COLOR_ERROR}ERROR: $?"
         return $(( $OFFSET_SEPERATOR + $OFFSET_ERROR ))
     fi 
 }
 
 
 function precmd() {
-    P="%F{34}$(dirs)$(prompt_previous_exit_code)$(prompt_python_venv)$(prompt_git_branch)$(prompt_git_status)"
+    PREVIOUS_EXIT_STATUS=$(prompt_previous_exit_code)
+    P="%F{34}$(dirs)$PREVIOUS_EXIT_STATUS$(prompt_python_venv)$(prompt_git_branch)$(prompt_git_status)"
+    # P="%F{34}$(dirs)$(prompt_previous_exit_code)$(prompt_python_venv)$(prompt_git_branch)$(prompt_git_status)"
     P="${P}${NEWLINE}"
     PS1="${P}%f%b$ "
-
 }
 
 
