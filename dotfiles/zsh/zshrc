@@ -4,13 +4,13 @@
 export TERM=screen-256color
 
 if [ "$(tput cols)" -gt 65 ]; then
-    sort -R "/Users/alan/workshop/dotfiles.alanwsmith.com/dotfiles/zsh/quotes" | \
+    sort -R "/Users/alan/workshop/dotfiles.alanwsmith.com/dotfiles/zsh/quotes.txt" | \
     head -1 | \
     sed 's/--/\n    --/' | \
     sed 's/$/\n/' | \
     fold -w 64 -s
 else
-    sort -R "/Users/alan/workshop/dotfiles.alanwsmith.com/dotfiles/zsh/quotes" | \
+    sort -R "/Users/alan/workshop/dotfiles.alanwsmith.com/dotfiles/zsh/quotes.txt" | \
     head -1 | \
     sed 's/--/\n    --/' | \
     sed 's/$/\n/'                         
