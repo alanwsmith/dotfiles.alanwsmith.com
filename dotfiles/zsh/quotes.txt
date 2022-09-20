@@ -81,7 +81,7 @@ We want the internet to be a level playing field, which means no company or orga
 You have brains in your head. - You have feet in your shoes. - You can steer yourself any direction you choose. -- Dr. Seuss -- Oh, the Places You'll Go!
 There is a cult of ignorance in the United States, and there always has been. The strain of anti-intellectualism has been a constant thread winding its way through our political and cultural life, nurtured by the false notion that democracy means that "my ignorance is just as good as your knowledge. -- Isaac Asimov - Newsweek Column - January, 1980
 The mind is for having ideas. Not for holding them. -- David Allen on a Merlin Mann podcast in 2006
-People, as a toolmakers, have the ability to make tools to amplify an inherent ability. -- Steve Jobs
+People, as toolmakers, have the ability to make tools to amplify an inherent ability. -- Steve Jobs
 As we move into the 80s, the amount of computational power, the amount of raw hourse power we can get into a small box for a reasonably price is staggering.  -- Steve Jobs in a presentation ca. 1980
 I hate it when people call themselves entrepreneurs when what they're really trying to do is launch a startup and then sell or go public so they can cash in and move on. They're unwilling to do the work it takes to build a real company, which is the hardest work in business. -- Steve Jobs
 The two central difficulties of programming are the same as the two central difficulties of road safety: like cars, programs are built by humans; and, like cars, programs are driven by humans. -- Damian Conway, Perl Best Practices
