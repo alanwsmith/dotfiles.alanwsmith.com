@@ -115,7 +115,8 @@ COLOR_PROMPT='%F{15}'
 # COLOR_BORDER='%F{248}'
 # COLOR_BORDER='%F{88}'
 # COLOR_BORDER='%F{81}'
-COLOR_BORDER='%F{15}'
+# COLOR_BORDER='%F{15}'
+COLOR_BORDER='%F{241}'
 # COLOR_PRIMARY='%F{253}'
 COLOR_PRIMARY='%F{15}'
 COLOR_SECONDARY='%F{241}'
@@ -201,7 +202,7 @@ function prompt_short_directory() {
 }
 
 function prompt_directory() {
-    echo -n "${COLOR_SECONDARY}blade:$(dirs)"
+    echo -n "${COLOR_SECONDARY}$(dirs)"
     return ${OFFSET_PRIMARY}
 }
 
@@ -453,5 +454,6 @@ function gl() {
  
 export PATH="/Users/alan/go/bin:$PATH"
 
+eval "$(zoxide init zsh)"
 
 
