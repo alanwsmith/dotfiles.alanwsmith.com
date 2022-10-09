@@ -27,13 +27,16 @@ then
   done
 fi 
 
-
 ######################################################################
-# TODO: Get private functions into a directory
+# Include private functions 
 
-if [ -f ~/.zshrc-private ]; then
-    source ~/.zshrc-private
-fi
+if [ -d "/Users/alan/.config/zshrc-private" ] 
+then 
+  for file in /Users/alan/.config/zshrc-private/*.zsh
+  do 
+    source "$file"
+  done
+fi 
 
 
 ######################################################################
