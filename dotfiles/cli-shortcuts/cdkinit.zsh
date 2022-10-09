@@ -15,5 +15,6 @@ function cdkinit () {
   rm source.bat && \
   rm README.md && \
   touch README.md
+  sed -i '' 's/#env=cdk.Environment(account=os/env=cdk.Environment(account=os/' app.py
 }
 
