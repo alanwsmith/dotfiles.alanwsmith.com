@@ -454,6 +454,6 @@ function gl() {
  
 export PATH="/Users/alan/go/bin:$PATH"
 
-eval "$(zoxide init zsh)"
+# eval "$(zoxide init zsh)"
 
 
