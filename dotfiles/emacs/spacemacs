@@ -42,7 +42,8 @@ This function should only modify configuration layer settings."
      markdown
      html
      javascript
-     python
+     ;; python
+     (python :variables python-formatter 'yapf)
      ruby
      rust
      sql
@@ -90,6 +91,9 @@ This function should only modify configuration layer settings."
                                       rustic
                                       )
 
+
+
+
    ;; A list of packages that cannot be updated.
    dotspacemacs-frozen-packages '()
 
@@ -104,6 +108,10 @@ This function should only modify configuration layer settings."
    ;; installs *all* packages supported by Spacemacs and never uninstalls them.
    ;; (default is `used-only')
    dotspacemacs-install-packages 'used-only))
+
+
+     
+
 
 (defun dotspacemacs/init ()
   "Initialization:
@@ -628,8 +636,6 @@ before packages are loaded."
   ;; code block with 'C-c C-c'
   (setq org-confirm-babel-evaluate nil)
 
-
-
   ;; Setup the Grimoire directory and script
   (defconst grimoire-mode-directory
     "/Users/alan/Grimoire"
@@ -662,8 +668,15 @@ results in the grimoire"
   ;; Turn off the highlighted line
   (setq global-hl-line-mode nil)
 
-  ;; Load the BEGIN_SRC Org Mode Source Block padder
+
+  ;; Load padder - the BEGIN_SRC Org Mode Source Block padder
   (org-babel-lob-ingest "/Users/alan/Grimoire/emacs- Styling Results Output From Emacs Org Mode Source Blocks.org")
+  ;; Load logger - 
+  (org-babel-lob-ingest "/Users/alan/Grimoire/emacs- Send Org Mode Source Block Output To A Log File.org")
+  ;; Load buffer-path to get current org mode file path in python scripts. 
+  (org-babel-lob-ingest "/Users/alan/Grimoire/emacs- Get the full path to the current buffer in Python.org")
+
+
 
   ;; Try to make Results blocks have a highlight
   ;; (with-eval-after-load 'evil-surround
@@ -727,7 +740,13 @@ results in the grimoire"
 
   ;; This was the oriignal python-mode-hooks
   ;; value that you can get back by removing the
-  ;; line that blanks it out. 
+  ;; line that blanks it out.
+
+  ;; I turned this back on to see if it was what was causing
+  ;; the invalid syntax - unexpected indent, but it wasn't
+  ;; the problem so commented it back out and put 
+  
+
   ;; ((closure
   ;;   (t)
   ;;   nil

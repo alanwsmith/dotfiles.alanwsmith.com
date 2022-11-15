@@ -2,5 +2,5 @@
 # Original file: user/er.yml
 
 matches:
-  - trigger: er;
+  - trigger: ;er
     replace: espanso restart

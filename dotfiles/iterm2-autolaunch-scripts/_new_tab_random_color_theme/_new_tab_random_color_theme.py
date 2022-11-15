@@ -1,13 +1,52 @@
-#!/usr/bin/env python3
-
 import iterm2
 import random
 
-# This is a copy of this script:
-# https://iterm2.com/python-api/examples/random_color.html
+# Grimoire Source ID: 2gehlk53afg7
 
-# TODO: Filter out the light mode presets that 
-# can't be removed
+themes_to_skip = [
+    'Afterglow',
+'Arthur',
+'BirtsOfParadise',
+'Brogrammer',
+'Chalk',
+'Darkside',
+'DoomOne',
+'DoomOne',
+'Earthsong',
+'HaX0R_BLUE',
+'IC_Green_PPL',
+'IR_Black',
+'Lab Fox',
+'Later This Evening',
+'Light Background',
+'LiquidCarbon',
+'Mariana',
+'Mathias',
+'Misterioso',
+'Monokai Vivid',
+'N0tch2k',
+'Neopolitan',
+'Retro',
+'Rippedcasts',
+'Ryuuko',
+'Smyck',
+'Solarized Light',
+'SpaceGray',
+'Spiderman',
+'SynthwaveAlpha',
+'Tango Light',
+'Teerb',
+'The Hulk',
+'UltraViolent',
+'Urple',
+'WildCherry',
+'kanagawabones',
+'nord',
+'seoulbones_dark',
+'shades-of-purple',
+'wilmersdorf',
+'zenburned',
+]
 
 
 async def SetPresetInSession(connection, session, preset_name):
@@ -21,14 +60,17 @@ async def SetPresetInSession(connection, session, preset_name):
 
 async def main(connection):
     app = await iterm2.async_get_app(connection)
-    color_preset_names = await iterm2.ColorPreset.async_get_list(connection)
     async with iterm2.NewSessionMonitor(connection) as mon:
         while True:
             session_id = await mon.async_get()
             session = app.get_session_by_id(session_id)
             if session:
+                color_preset_names = await iterm2.ColorPreset.async_get_list(connection)
+                for theme_to_skip in themes_to_skip:
+                    if theme_to_skip in color_preset_names:
+                        color_preset_names.remove(theme_to_skip)
                 new_theme = random.choice(color_preset_names)
-                print(f"Switching to theme: {new_theme}")
+                await session.tab.async_set_title(f"Theme: {new_theme}")
                 await SetPresetInSession(connection, session, new_theme)
 
 iterm2.run_forever(main)

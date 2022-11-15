@@ -3,6 +3,11 @@
 TIMESTAMP=$(date "+%Y-%m-%d %H:%M:%S")
 
 echo "#+TITLE: "
+echo "---:::---"
+echo ""
+echo ""
+echo ""
+echo "---:::---"
 echo "#+DATE: $TIMESTAMP"
 echo "#+BLURB: "
 echo "#+UPDATED: "
@@ -10,10 +15,8 @@ echo "#+ID: `/Users/alan/go/bin/ksuid | cut -c1-12 | tr '[:upper:]' '[:lower:]'`
 echo "#+CATEGORY: Miscellaneous"
 echo "#+FACET: "
 echo "#+SITE: aws"
-echo "#+STATUS: pending-"
+echo "#+STATUS: pending"
 echo "#+TYPE: post"
 echo "#+SHOWDATE: false"
 echo "#+SCRUBBED_ORG: true"
-echo ""
-echo "---:::---"
 echo ""
