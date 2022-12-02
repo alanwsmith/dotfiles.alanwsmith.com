@@ -2,13 +2,10 @@
 (global-set-key (kbd "C-M-!") 'copy-buffer-name-to-osx-clipboard)
 
 
-
-
 ;; C-M-S-h is for when Emacs is already active
 ;; C-M-S-i catches the signal that's passed from
 ;; Alfred when C-M-S-h is triggered outside of Emacs
 (global-set-key (kbd "C-M-S-h") 'grimoire-mode-search)
-(global-set-key (kbd "C-M-S-i") 'grimoire-mode-search)
 
 (global-set-key (kbd "C-M-S-t") 'org-babel-tangle)
 
@@ -18,12 +15,12 @@
 (global-set-key (kbd "C-M-S-f") 'close-error-window-and-run)
 
 ;; Execute all source blocks in a buffer
-(global-set-key (kbd "C-M-S-a") 'spacemacs/add-word-to-dict-global)
+;;(global-set-key (kbd "C-M-S-a") 'spacemacs/add-word-to-dict-global)
 (global-set-key (kbd "C-M-S-b") 'org-babel-execute-buffer)
 
 (global-set-key (kbd "C-M-S-n") 'rename-this-file)
 
-(global-set-key (kbd "C-M-S-q") 'open-buffer-in-new-frame)
+(global-set-key (kbd "C-M-S-a") 'open-buffer-in-new-frame)
 (global-set-key (kbd "C-M-S-z") 'helm-for-files)
 
 
@@ -45,3 +42,5 @@
 (global-set-key (kbd "C-M-S-u") 'not-mapped-on-moonlander)
 (global-set-key (kbd "C-M-S-v") 'not-mapped-on-moonlander)
 (global-set-key (kbd "C-M-S-w") 'not-mapped-on-moonlander)
+;; q is actually mapped, but it's not working for some reason..
+(global-set-key (kbd "C-M-S-q") 'not-mapped-on-moonlander)
