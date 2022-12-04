@@ -4,6 +4,12 @@ set nu
 " Make line numbers relative
 set rnu
 
+" Disable the mouse
+set mouse=
+
+" Copy and paste to the sytem clipboard
+set clipboard+=unnamedplus
+
 
 " TODO - note what these each do
 set shiftwidth=4
@@ -47,7 +53,7 @@ call plug#begin("~/.vim/plugged")
     " Prettier
     Plug 'prettier/vim-prettier', {
     \ 'do': 'yarn install',
-    \ 'for': ['javascriptreact', 'typescriptreact', 'javascript', 'typescript', 'css', 'less', 'scss', 'json', 'graphql', 'markdown', 'vue', 'svelte', 'yaml', 'html'] }
+    \ 'for': ['javascriptreact', 'typescriptreact', 'javascript', 'typescript', 'css', 'less', 'scss', 'json', 'graphql', 'markdown', 'vue', 'svelte', 'yaml', 'html', 'rs'] }
 
 
     " Tree sitter which is configured below for
