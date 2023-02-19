@@ -1,0 +1,11 @@
+matches:
+  - trigger: fj;
+    replace: '{{output}}'
+    vars:
+      - name: output
+        type: script
+        params:
+          args:
+            - /opt/homebrew/bin/python3
+            - '%CONFIG%/scripts/tmp_fj.py'
+          trim: false

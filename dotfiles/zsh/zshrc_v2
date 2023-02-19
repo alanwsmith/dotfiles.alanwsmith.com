@@ -201,7 +201,12 @@ function prompt_previous_exit_code() {
 
 function precmd() {
     PREVIOUS_EXIT_STATUS=$(prompt_previous_exit_code)
-    P="%F{34}$(dirs)$PREVIOUS_EXIT_STATUS$(prompt_python_venv)$(prompt_git_branch)$(prompt_git_status)"
+    ######################
+    # These two turn the git preview on and off. Just pick one
+    P="%F{34}$(dirs)$PREVIOUS_EXIT_STATUS$(prompt_python_venv)"
+    # P="%F{34}$(dirs)$PREVIOUS_EXIT_STATUS$(prompt_python_venv)$(prompt_git_branch)$(prompt_git_status)"
+    #############
+    
     # P="%F{34}$(dirs)$(prompt_previous_exit_code)$(prompt_python_venv)$(prompt_git_branch)$(prompt_git_status)"
     P="${P}${NEWLINE}"
     PS1="${P}%f%b$ "

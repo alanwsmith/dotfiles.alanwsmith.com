@@ -1,3 +1,4 @@
+
 " Turn on line numbers
 set nu
 
@@ -12,8 +13,9 @@ set clipboard+=unnamedplus
 
 
 " TODO - note what these each do
-set shiftwidth=4
-set softtabstop=4
+set tabstop=2
+set shiftwidth=2
+set softtabstop=2
 set autowrite
 set autoread
 set nowrap
@@ -21,10 +23,11 @@ set expandtab
 set smarttab
 set autoindent
 set smartindent
-set copyindent
+" set copyindent
 set shiftround
 set smartcase
 set incsearch
+set spell
 
 
 " stop highlighting matching brackets
@@ -53,21 +56,42 @@ call plug#begin("~/.vim/plugged")
     " Prettier
     Plug 'prettier/vim-prettier', {
     \ 'do': 'yarn install',
-    \ 'for': ['javascriptreact', 'typescriptreact', 'javascript', 'typescript', 'css', 'less', 'scss', 'json', 'graphql', 'markdown', 'vue', 'svelte', 'yaml', 'html', 'rs'] }
+    \ 'for': ['javascriptreact', 'typescriptreact', 'javascript', 'typescript', 'css', 'less', 'scss', 'json', 'graphql', 'markdown', 'vue', 'svelte', 'yaml', 'html', 'tsx'] }
 
 
-    " Tree sitter which is configured below for
-    " highlighting
+
+    " Tree sitter which is configured below for highlighting
     Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 
     " nvim-tree for file browsing
-    Plug 'nvim-tree/nvim-web-devicons' " optional, for file icons
-    Plug 'nvim-tree/nvim-tree.lua'
+    " Plug 'nvim-tree/nvim-web-devicons' " optional, for file icons
+    " Plug 'nvim-tree/nvim-tree.lua'
 
     " lets you do comments quickly with `gcap`
     Plug 'tpope/vim-commentary'
 
+    " For Rust Analyzer:
+    Plug 'rust-lang/rust.vim'
+    Plug 'neovim/nvim-lspconfig'
+    Plug 'simrat39/rust-tools.nvim'
+
+
 call plug#end()
+
+lua <<EOF
+local rt = require("rust-tools")
+rt.setup({
+  server = {
+    on_attach = function(_, bufnr)
+      -- Hover actions
+      vim.keymap.set("n", "<C-space>", rt.hover_actions.hover_actions, { buffer = bufnr })
+      -- Code action groups
+      vim.keymap.set("n", "<Leader>a", rt.code_action_group.code_action_group, { buffer = bufnr })
+    end,
+  },
+})
+
+EOF
 
 
 " Let prettier autoformat on save
@@ -78,26 +102,26 @@ let g:prettier#quickfix_enabled=0
 command! -nargs=0 Prettier :CocCommand prettier.formatFile
 
 
-lua <<EOF
-require'nvim-treesitter.configs'.setup {
-    -- A list of parser names, or "all"
-    ensure_installed = { "javascript", "c", "lua", "rust", "json", "python" },
-    sync_install = false,
-    auto_install = true,
-    highlight = {
-	enable = true,
-	additional_vim_regex_highlighting = false
-    },
-}
-EOF
+" lua <<EOF
+" require'nvim-treesitter.configs'.setup {
+"     -- A list of parser names, or "all"
+"     ensure_installed = { "javascript", "c", "lua", "rust", "json", "python", "typescript" },
+"     sync_install = false,
+"     auto_install = true,
+"     highlight = {
+" 	enable = true,
+" 	additional_vim_regex_highlighting = false
+"     },
+" }
+" EOF
 
-" nvim-tree configuration 
-lua <<EOF
-    vim.g.loaded_netrw = 1
-    vim.g.loaded_netrwPlugin = 1
-    vim.opt.termguicolors = true
-    require("nvim-tree").setup()
-EOF
+" " nvim-tree configuration 
+" lua <<EOF
+"     vim.g.loaded_netrw = 1
+"     vim.g.loaded_netrwPlugin = 1
+"     vim.opt.termguicolors = true
+"     require("nvim-tree").setup()
+" EOF
 
 
 
@@ -135,6 +159,9 @@ map <leader>m :let $RUN_THIS = expand('%:p')<cr>
 map <leader>r :!if [ $RUN_THIS ]; then python3 "${RUN_THIS}"; else python3 %; fi<cr>
 map <leader>R :!python3 %<cr>
 
+
+" map <leader>r :!cargo run<cr>
+
 """"" JavaScript runner
 " map <leader>r :!node %<cr>
 " map <leader>j :!/usr/bin/env node %<cr>
@@ -167,3 +194,8 @@ augroup END
 " have an unsaved buffer. I'll look into that if I hit it. 
 " via: https://vim.fandom.com/wiki/Auto_save_files_when_focus_is_lost
 " :au FocusLost * :wa
+
+
+" let g:rustfmt_autosave = 1
+
+let g:rustfmt_autosave = 1
